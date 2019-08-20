@@ -41,6 +41,8 @@ sudo sed -i 's/# alias ll=\x27ls \$LS_OPTIONS -l\x27/alias ll=\x27ls \$LS_OPTION
 
 sudo apt-get -y install mc vim git dpkg-dev apt-transport-https ca-certificates dirmngr
 
+cd /home/debian/;
+
 if [[ "$PRIVATE_REPO" == "true" ]];then
   # Private key for deploy keys
   #...INSERT PRIVATE KEY AS DEPLOY KEY HERE...
