@@ -1,0 +1,41 @@
+update_sources(){ 
+  apt-get update ;
+
+  # Include global Conf
+  cd "$SCRIPTDIR"
+  . $CONF_DIR/.conf
+
+  # Create dirs
+  TMP_DIR="/tmp/${name}-tmp" ;
+  INSTALL_DIR="/opt/${name}" ;
+  mkdir -p "${INSTALL_DIR}";
+  mkdir -p "${TMP_DIR}";
+  PATH_FILE="/home/debian/path.txt" ;
+
+}
+
+set_sshd_config(){
+  # Disable login using password
+  sed -i 's/#PasswordAuthentication yes/PasswordAuthentication no/g' /etc/ssh/sshd_config ;
+  # Enable only strong ciphers and MACs algorithms
+  sed -i 's/#   Ciphers.*/Ciphers chacha20-poly1305@openssh.com,aes256-gcm@openssh.com,aes128-gcm@openssh.com,aes256-ctr,aes192-ctr,aes128-ctr/g' /etc/ssh/sshd_config ;
+  sed -i '/^Ciphers .*/a MACs hmac-sha2-512-etm@openssh.com,hmac-sha2-256-etm@openssh.com,umac-128-etm@openssh.com' /etc/ssh/sshd_config ;
+  sed -i '/^MACs .*/a HostKeyAlgorithms ssh-rsa,rsa-sha2-512,rsa-sha2-512,rsa-sha2-512' /etc/ssh/sshd_config ;
+  # Other sshd_setting
+  sed -i 's/#SyslogFacility .*/SyslogFacility AUTHPRIV/g' /etc/ssh/sshd_config ;
+  sed -i 's/#PermitRootLogin .*/PermitRootLogin no/g' /etc/ssh/sshd_config ;
+  sed -i 's/AcceptEnv LANG LC_\*/AcceptEnv LANG LC_CTYPE LC_NUMERIC LC_TIME LC_COLLATE LC_MONETARY LC_MESSAGES/g' /etc/ssh/sshd_config ;
+  sed -i '/^AcceptEnv LANG .*/a AcceptEnv LC_PAPER LC_NAME LC_ADDRESS LC_TELEPHONE LC_MEASUREMENT' /etc/ssh/sshd_config ;
+  sed -i '/^AcceptEnv LC_PAPER .*/a AcceptEnv LC_IDENTIFICATION LC_ALL LANGUAGE' /etc/ssh/sshd_config ;
+  sed -i '/^AcceptEnv LC_IDENTIFICATION .*/a AcceptEnv XMODIFIERS' /etc/ssh/sshd_config ;
+  sed -i '/^AcceptEnv XMODIFIERS/a AcceptEnv GIT_*' /etc/ssh/sshd_config ;
+
+  #  SSH config
+  sed -i 's/#   Ciphers.*/Ciphers chacha20-poly1305@openssh.com,aes256-gcm@openssh.com,aes128-gcm@openssh.com,aes256-ctr,aes192-ctr,aes128-ctr/g' /etc/ssh/ssh_config ;
+  sed -i '/^Ciphers .*/a MACs hmac-sha2-512-etm@openssh.com,hmac-sha2-256-etm@openssh.com,umac-128-etm@openssh.com' /etc/ssh/ssh_config ;
+  sed -i '/^MACs .*/a HostKeyAlgorithms ssh-rsa,rsa-sha2-512,rsa-sha2-512,rsa-sha2-512' /etc/ssh/ssh_config ;
+  sed -i 's/#   ForwardX11Trusted yes/ForwardX11Trusted yes/g' /etc/ssh/ssh_config ;
+
+  /etc/init.d/ssh reload
+
+}

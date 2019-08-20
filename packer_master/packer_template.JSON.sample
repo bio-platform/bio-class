@@ -1,0 +1,61 @@
+{
+"builders": [{
+  "type": "openstack",
+  "communicator": "ssh",
+  "ssh_keypair_name": "<Select appropriate ID from command output: 'openstack keypair list' to match ssh_private_key_file>",
+  "ssh_private_key_file": "<Local path to the private key used during SSH connection for provisioning>",
+  "floating_ip": "<Select appropriate ID from command output: 'openstack floating ip list'>",
+  "ssh_username": "<Login used during SSH connection, for debian typically name debian>",
+  "image_name": "<Name for new packer master image>",
+  "source_image": "<Select appropriate ID from command output: 'openstack image list'>",
+  "flavor": "<Select appropriate ID from command output: 'openstack flavor list'>"
+}],
+"provisioners": [
+        {
+            "type": "shell",
+            "script": "./packer-init-packer-master.sh"
+        },
+        {
+           "type": "shell",
+            "inline":[
+                "mkdir -p /home/debian/bio-class/packer_master/admin_keys/",
+                "mkdir -p /home/debian/bio-class/packer_master/openstack_credentials/"
+            ]
+        },
+        {
+            "type": "file",
+            "source": "./packer_keys/",
+            "destination": "~/.ssh/"
+        },
+        {
+            "type": "file",
+            "source": "./admin_keys/",
+            "destination": "/home/debian/bio-class/packer_master/admin_keys/"
+        },
+        {
+            "type": "file",
+            "source": "./openstack_credentials/",
+            "destination": "/home/debian/bio-class/packer_master/openstack_credentials/"
+        },
+        {
+           "type": "shell",
+            "inline":[
+                "for file in /home/debian/bio-class/packer_master/admin_keys/*.pub; do cat $file >> ~/.ssh/authorized_keys; done",
+                "chmod 644 ~/.ssh/authorized_keys",
+                "chmod 600 ~/.ssh/packer_id_rsa",
+                "chmod 644 ~/.ssh/packer_id_rsa.pub",
+                "chmod +x /home/debian/bio-class/packer_master/openstack_credentials/*.sh",
+                "for file in /home/debian/bio-class/packer_master/openstack_credentials/*.sh; do echo \"source $file\" >> ~/.bashrc; done",
+                "echo 'eval $(ssh-agent -s)' >> ~/.bashrc; done",
+                "echo \"ssh-add ~/.ssh/packer_id_rsa\" >> ~/.bashrc; done"
+            ]
+        },
+        {
+           "type": "shell",
+            "inline":[
+                "echo 'End of provisioning'"
+            ]
+        }
+    ]
+
+}

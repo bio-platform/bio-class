@@ -1,0 +1,61 @@
+{
+"builders": [{
+  "type": "openstack",
+  "communicator": "ssh",
+  "ssh_keypair_name": "packer-key",
+  "ssh_private_key_file": "~/.ssh/packer_id_rsa",
+  "floating_ip": "65d08033-b7d5-44e5-8e05-6d7543502f39",
+  "ssh_username": "debian",
+  "image_name": "debian-9-x86_64_bioconductor_packer_master",
+  "source_image": "7cba2bef-041b-45e4-b14f-ac6e035ff602",
+  "flavor": "6c329868-8337-4084-9971-6f58f8208221"
+}],
+"provisioners": [
+        {
+            "type": "shell",
+            "script": "./packer-init-packer-master.sh"
+        },
+        {
+           "type": "shell",
+            "inline":[
+                "mkdir -p /home/debian/bio-class/packer_master/admin_keys/",
+                "mkdir -p /home/debian/bio-class/packer_master/openstack_credentials/"
+            ]
+        },
+        {
+            "type": "file",
+            "source": "./packer_keys/",
+            "destination": "~/.ssh/"
+        },
+        {
+            "type": "file",
+            "source": "./admin_keys/",
+            "destination": "/home/debian/bio-class/packer_master/admin_keys/"
+        },
+        {
+            "type": "file",
+            "source": "./openstack_credentials/",
+            "destination": "/home/debian/bio-class/packer_master/openstack_credentials/"
+        },
+        {
+           "type": "shell",
+            "inline":[
+                "for file in /home/debian/bio-class/packer_master/admin_keys/*.pub; do cat $file >> ~/.ssh/authorized_keys; done",
+                "chmod 644 ~/.ssh/authorized_keys",
+                "chmod 600 ~/.ssh/packer_id_rsa",
+                "chmod 644 ~/.ssh/packer_id_rsa.pub",
+                "chmod +x /home/debian/bio-class/packer_master/openstack_credentials/*.sh",
+                "for file in /home/debian/bio-class/packer_master/openstack_credentials/*.sh; do echo \"source $file\" >> ~/.bashrc; done",
+                "echo 'eval $(ssh-agent -s)' >> ~/.bashrc; done",
+                "echo \"ssh-add ~/.ssh/packer_id_rsa\" >> ~/.bashrc; done"
+            ]
+        },
+        {
+           "type": "shell",
+            "inline":[
+                "echo 'End of provisioning'"
+            ]
+        }
+    ]
+
+}
