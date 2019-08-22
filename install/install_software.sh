@@ -490,6 +490,7 @@ echo \"channels:
   echo -e "alias stopNFS='cd /home/${BIOUSER}/NFS && ./startNFS.sh -m destroy'" >> /home/"$BIOUSER"/.bashrc;
   echo -e "alias startHTTPS='cd /home/${BIOUSER}/HTTPS && ./startHTTPS.sh -m https'" >> /home/"$BIOUSER"/.bashrc;
   echo -e "alias stopHTTPS='cd /home/${BIOUSER}/HTTPS && ./startHTTPS.sh -m http'" >> /home/"$BIOUSER"/.bashrc;
+  echo -e "alias statusHTTPS='cd /home/${BIOUSER}/HTTPS && ./startHTTPS.sh -m status'" >> /home/"$BIOUSER"/.bashrc;
   echo -e "alias startHTTPSlocalCrt='cd /home/${BIOUSER}/HTTPS && ./startHTTPS.sh -m localcrt'" >> /home/"$BIOUSER"/.bashrc;
 fi
 
@@ -553,14 +554,14 @@ if [[ "$MODE" == "all" ]] || [[ "$MODE" == "post" ]];then
   # Message change if student account instead of real Einfra account
   tmp_text_student=
   if [[ "$BIOUSER" == "student" ]];then
-    tmp_text_student="For account student NFS mount won't work! To access NFS storage rather create new instance using your Einfra login!\n"
+    tmp_text_student="\n\nFor account student NFS mount won't work! To access NFS storage rather create new instance using your Einfra login!"
   fi
   floating_ip_text="http://<Openstack-Floating-IP>:8787"
   if [[ -n "$public_ipv4" ]];then
     public_ipv4_name=$(nslookup "$public_ipv4" | grep name | sed -rn "s/.*name = (.*)/\1/p" | sed "s/\.$//g")
     floating_ip_text="https://${public_ipv4_name}"
   fi
-  echo -e "\n\n"$tmp_text"\n\nRstudio available at "$floating_ip_text" using account "$BIOUSER" and password $(cat /home/"$BIOUSER"/rstudio-pass)\n\nTo mount NFS storage execute \"startNFS\" using your MetaCentrum Cloud password.\n"$tmp_text_student"\n\nTo switch Rstudio from HTTP to HTTPS, run one of the following commands of your choice:\n\"  startHTTPS\" -  get a certificate from  Let\’s Encrypt\n\"  startHTTPSlocalCrt\" - get self-signed certificate with OpenSSL\n  (In Browser Allow Self Signed Certificate: button Advanced -> Add Exception / Accept the Risk and Continue)\n  (To switch back to unsecured HTTP execute command stopHTTPS)\n\nTo activate conda execute command \"startConda\", to deactivete \"conda deactivate\".\n\n" > /etc/motd
+  echo -e "\n\n"$tmp_text"\n\nRstudio available at "$floating_ip_text" using account "$BIOUSER" and password $(cat /home/"$BIOUSER"/rstudio-pass)\n\nFind out the current Rstudio URL using command \"statusHTTPS\".\n\nTo mount NFS storage execute \"startNFS\" using your MetaCentrum Cloud password, to umount \"stopNFS\"."$tmp_text_student"\n\nTo switch Rstudio from HTTP to HTTPS, run one of the following commands of your choice:\n * \"startHTTPS\" -  get a certificate from  Let’s Encrypt\n * \"startHTTPSlocalCrt\" - get self-signed certificate with OpenSSL\n   (In Browser Allow Self Signed Certificate: button Advanced -> Add Exception / Accept the Risk and Continue)\n * To switch back to unsecured HTTP execute command stopHTTPS\n\nTo activate conda execute command \"startConda\", to deactivete \"conda deactivate\".\n\n" > /etc/motd
 
 
 fi

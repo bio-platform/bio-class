@@ -1,0 +1,5 @@
+packer_master/admin_keys/*
+packer_master/packer_keys/*
+packer_master/openstack_credentials/*
+install/files/*
+install/logs/*

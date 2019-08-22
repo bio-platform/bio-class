@@ -130,7 +130,7 @@ fi
 
 INFO "Public IPv4: $public_ipv4"
 DEBUG "public_ipv4_2text: $public_ipv4_2text"
-INFO "Public IPv4 Name: $public_ipv4_name"
+INFO "Public IPv4 Domain Name: $public_ipv4_name"
 
 # Check if backup directory available
 if [[ -z "$NFS_HOME_PERSISTENT" ]] && ( [[ "$MODE" == "https" ]] || [[ "$MODE" == "restore" ]]);then
@@ -144,6 +144,7 @@ fi
 if ( [[ "$MODE" == "https" ]] || [[ "$MODE" == "restore" ]]);then
   if [[ -z `find "${NFS_HOME_PERSISTENT}" -maxdepth 1 -type d -path "${NFS_HOME_PERSISTENT}/${USER}"` ]];then
     ERROR "Unable to find NFS backup directory ${NFS_HOME_PERSISTENT}/${USER}, check it please!"
+    INFO "Consider to execute command startNFS before generating certificate."
     exit 1
   else
     DEBUG "Crete HTTPS backup directory on NFS"
@@ -180,15 +181,16 @@ checkstate() {
   if [[ -n "$public_ipv4" ]] && [[ -n "$public_ipv4_2text" ]] && [[ -n "$BIOUSER_EMAIL" ]]; then
     chain_exists=$(sudo certbot certificates 2>&1 | egrep "Certificate Path" | egrep "$public_ipv4_2text")
     key_exists=$(sudo certbot certificates 2>&1| egrep "Private Key Path" | egrep "$public_ipv4_2text")
-    cert_path=$(sudo find /etc/letsencrypt/live/ -name cert.pem | head -n 1)
-    key_path=$(sudo find /etc/letsencrypt/live/ -name privkey.pem | head -n 1)
+    cert_path=$(sudo find /etc/letsencrypt/live/ -name cert.pem 2>/dev/null | head -n 1)
+    key_path=$(sudo find /etc/letsencrypt/live/ -name privkey.pem 2>/dev/null | head -n 1)
     nginx_installed=$(sudo dpkg -s nginx | grep Status | egrep "Status: install ok installed")
     backports_list_present=$(sudo find /etc/apt/sources.list.d/backports.list)
     certbot_installed=$(sudo dpkg -s certbot | grep Status | egrep "Status: install ok installed")
     python_certbot_nginx_installed=$(sudo dpkg -s "python-certbot-nginx" | grep "Status" )
     localcrt=$(find /etc/nginx/ -maxdepth 1 -name cert.crt -type f )
     localkey=$(find /etc/nginx/ -maxdepth 1 -name cert.key -type f )
-
+    nginx_conf_https=$(sudo egrep "cert.pem" /etc/nginx/nginx.conf 2>/dev/null)
+    nginx_conf_https_localcrt=$(sudo egrep "cert.crt" /etc/nginx/nginx.conf 2>/dev/null)
   else
     ERROR "Unable to check certificates, IPv4 public address not found, exiting!"
     exit 1
@@ -291,11 +293,20 @@ if [[ "$MODE" == "status" ]];then
   DEBUG "backports_list_present: $backports_list_present"
   DEBUG "certbot_installed: $certbot_installed"
   DEBUG "python_certbot_nginx_installed: $python-certbot-nginx_installed"
+  DEBUG "nginx_conf_https: $nginx_conf_https"
+  DEBUG "nginx_conf_https_localcrt: $nginx_conf_https_localcrt"
 
-  if [[ -n "$chain_exists" ]] || [[ -n "$key_exists" ]] || [[ -n "$cert_path" ]] || [[ -n "$key_path" ]] || [[ -n "$FORCE" ]];then
+  if [[ -n "$chain_exists" ]] || [[ -n "$key_exists" ]] || [[ -n "$cert_path" ]] || [[ -n "$key_path" ]] || [[ -n "$FORCE" ]] && [[ -n "$nginx_conf_https" ]];then
     OK "Certificate OK"
-  elif [[ -n "$localcrt" ]] && [[ -n "$localkey" ]];then
+    INFO "Rstudio available at https://${public_ipv4_name}"
+  elif [[ -n "$localcrt" ]] && [[ -n "$localkey" ]] && [[ -n "$nginx_conf_https_localcrt" ]];then
     OK "Local certificate exists, OK"
+    INFO "Rstudio available at https://${public_ipv4_name}
+Please note that using self signed certificate need this step: In Browser Allow Self Signed Certificate: button Advanced -> Add Exception / Accept the Risk and Continue."
+  elif [[ -z "$nginx_conf_https" ]] && [[ -z "$nginx_conf_https_localcrt" ]];then
+    ERROR "No certificate configured for HTTPS, please note that HTTP is unsecured!
+Consider deploying a certificate executing startHTTPS or startHTTPSlocalCrt commands."
+    INFO "Rstudio available at http://${public_ipv4}:8787"
   else
     ERROR "Error during certificate check:"
     DEBUG "chain_exists: $chain_exists"
@@ -440,7 +451,7 @@ elif  [[ "$MODE" == "https" ]] || [[ "$MODE" == "restore" ]];then
     set_rserverconf
 
     # After successfull certificate creation proceed with backup now
-    if [[ "$ certbot_status" -eq 0 ]];then
+    if [[ "$certbot_status" -eq 0 ]];then
       backup_now=1
     fi
   else

@@ -61,6 +61,12 @@ packer validate packer_template.JSON
 packer build -debug packer_template.JSON
 ```
 
+### Rename Previous Image
+
+```
+openstack image set --name <imageName> <imageID>
+```
+
 ### Delete an Image
 
 ```
