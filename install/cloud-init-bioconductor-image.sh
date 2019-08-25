@@ -34,6 +34,8 @@ if [[ -d /home/debian/bio-class ]];then
   mv /home/debian/bio-class /home/debian/bio-class-backup
 fi
 
+cd /home/debian/;
+
 if [[ "$PRIVATE_REPO" == "true" ]];then
   # Private key for deploy keys
   echo -e "-----BEGIN RSA PRIVATE KEY-----
