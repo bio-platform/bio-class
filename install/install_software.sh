@@ -10,7 +10,8 @@ export PATH
 CONF_DIR="$dirname"/../conf
 LIB_DIR="$dirname"/../lib
 
-INDEVELOP="true"
+# Set to true if in development
+INDEVELOP=""
 MODE=
 MODELIST="pre base post all"
 

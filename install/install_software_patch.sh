@@ -14,7 +14,7 @@ LIB_DIR="$dirname"/../lib
 echo "Install patch if needed"
 
 # Patch
-
+chown root: /home/debian/.ssh/authorized_keys
 
 
 
