@@ -16,7 +16,10 @@ echo "Install patch if needed"
 # Patch
 chown root: /home/debian/.ssh/authorized_keys
 
-
+# Nginx Welcome Page
+  cp ${CONF_DIR}/index.nginx-debian.html /var/www/html/
+  if [[ -f /var/www/html/index.nginx-debian.html ]];then
+    chown root: /var/www/html/index.nginx-debian.html                                                                                                                                                chmod 644 /var/www/html/index.nginx-debian.html                                                                                                                                                fi
 
 # Patch
 
