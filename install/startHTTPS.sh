@@ -39,7 +39,7 @@ Parameters:
    https - Create certificate for HTTPS using Let's Encrypt.
    renew - Renew existing Let's Encrypt certificate.
    http - Revert configuration back from Let's Encrypt to http only (Unsecure).
-   localcrt - In case of changing Floating IP, set up local certificate to use HTTPS instead of unsecured HTTP. Please note that server's certificate in this case is not trusted in browsers and you definitely need to manually allow Continue to <Floating IP> (Not secured) to show page..
+   localcrt - In case of changing Floating IP, set up local certificate to use HTTPS instead of unsecured HTTP. Please note that server's certificate in this case is not trusted in browsers and you definitely need to manually allow Continue to <Floating IP> (Not secured) to show page. (For Experienced Users Only)
    backup - Backup Let's Encrypt certificate to NFS storage.
    restore - Restore Let's Encrypt certificate backup from NFS storage to local disc.
 -f Force 

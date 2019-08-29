@@ -6,7 +6,7 @@ Repository for building virtual classroom for biology students using [OpenStack]
 * Genomics: algorithms and analysis class tought at Institute of Molecular Genetics of the ASCR, v. v. i.
 
 ## Image with installed software
-Prefered way is to use prepared image containing all required software. Some of steps below are covered by fronted application. In case of manual action, please check all required steps individually.
+Use prepared image containing all required software is a preferred way. Some of steps below are covered by fronted application. In case of manual action, please check all required steps individually.
 
 ### SSH Access
 Connect to the VM using your [login](https://cloud.gitlab-pages.ics.muni.cz/documentation/register/), [id_rsa key registered in Openstack](https://cloud.gitlab-pages.ics.muni.cz/documentation/quick-start/#create-key-pair) and [Floating IP](https://cloud.gitlab-pages.ics.muni.cz/documentation/quick-start/#associate-floating-ip):
@@ -31,10 +31,14 @@ There are only two steps to proceed with after instance launch using prepared im
       * shared - contains shared data for BIO class
     * In case of issues try to execute `stopNFS` and `startNFS` again
 
-* Swith to HTTPS running command `startHTTPS` or `startHTTPSlocalCrt` ([In browser you need to accept self-signed certificate](doc/img/browser_exception.png))
+* Swith to HTTPS running command `startHTTPS`
     * By default Rstudio uses HTTP (unsecured) and is accesible on port 8787
     * Find out the current Rstudio URL using command `statusHTTPS`
-    * In case of issues try to execute `stopHTTPS` and `startHTTPS` again or using `startHTTPSlocalCrt`
+    * In case of issues try to execute `stopHTTPS` and `startHTTPS` again
+    * In case of issue obtaing Let's Encrypt certificate using `startHTTPS` try `startHTTPSlocalCrt` (For Experienced Users Only)
+      ([In browser you need to accept self-signed certificate](doc/img/browser_exception.png))
+    * To switch back to HTTP only use `stopHTTPS`
+    * Find out the current Rstudio URL using command `statusHTTPS`
 
 ### Tips
 If you use Shiny library then please [confirm pop-ups](doc/img/shiny_pop-ups.png).

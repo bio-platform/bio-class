@@ -1,6 +1,6 @@
 # Install all required software directly during VM cloud init (time consuming)
 
-Using prepared image is a prefered way, but for testing purposes you may try to initialize VM in personal project.
+Using prepared image is a preferred way, but for testing purposes you may try to initialize VM in personal project.
 
 * Follow the instructions [Quick Start](https://cloud.gitlab-pages.ics.muni.cz/documentation/quick-start/)
 * Obtain Floating IP, update Security Group and so on
