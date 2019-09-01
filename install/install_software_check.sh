@@ -157,7 +157,7 @@ command_status="$?"
 function_echo_output
 
 SW_NAME="BiocManager"
-command_output=$(Rscript -e "BiocManager::valid()" | egrep "Bioconductor version")
+command_output=$(Rscript -e "BiocManager::version()")
 command_status="$?"
 function_echo_output
 
