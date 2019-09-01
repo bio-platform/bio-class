@@ -247,7 +247,7 @@ if ([[ -n "$BIOSW_GAA" ]] && [[ "$MODE" == "all" ]]) || [[ "$MODE" == "base" ]];
   #install_blast
   SW_NAME="blast";SW_VERSION="2.9.0";cd  "$TMP_DIR";
   [ ! -f "${TMP_DIR}/ncbi-blast-${SW_VERSION}+-x64-linux.tar.gz" ] && wget --no-verbose  ftp://ftp.ncbi.nlm.nih.gov/blast/executables/blast+/${SW_VERSION}/ncbi-blast-${SW_VERSION}+-x64-linux.tar.gz -P "${TMP_DIR}"
-  mkdir -p "${INSTALL_DIR}/ncbi-${SW_NAME}.${SW_VERSION}+"; tar -zxf "$(find "$TMP_DIR" -maxdepth 1 -name "ncbi-${SW_NAME}*" -type f)" -C "${INSTALL_DIR}"
+  mkdir -p "${INSTALL_DIR}/ncbi-${SW_NAME}-${SW_VERSION}+"; tar -zxf "$(find "$TMP_DIR" -maxdepth 1 -name "ncbi-${SW_NAME}*" -type f)" -C "${INSTALL_DIR}"
   PATH=$PATH;PATH+=":${INSTALL_DIR}/ncbi-${SW_NAME}-${SW_VERSION}+/bin"; export PATH ; echo ":${INSTALL_DIR}/ncbi-${SW_NAME}-${SW_VERSION}+/bin" >> "${PATH_FILE}"
 
   #install_bowtie                                               
