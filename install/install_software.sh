@@ -532,6 +532,14 @@ if [[ "$MODE" == "all" ]] || [[ "$MODE" == "base" ]] || [[ "$MODE" == "post" ]];
   # Diffie-Hellman, ssh -Q kex, ssh -Q cipher | sort -u
   mkdir -p /etc/ssl/private
   chmod 710 /etc/ssl/private
+  if [[ "$MODE" == "all" ]] || [[ "$MODE" == "post" ]]; then
+    if [[ -f  /root/.rnd ]];then
+      rm /root/.rnd
+    fi
+    touch /root/.rnd
+    chown root: /root/.rnd
+    export RANDFILE=/root/.rnd
+  fi
   cd /etc/ssl/private &&  openssl dhparam -out dhparams.pem 2048; chmod 600 dhparams.pem
 
   /etc/init.d/ssh reload
