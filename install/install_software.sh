@@ -500,6 +500,9 @@ echo \"channels:
   echo -e "alias startHTTPSlocalCrt='cd /home/${BIOUSER}/HTTPS && ./startHTTPS.sh -m localcrt'" >> /home/"$BIOUSER"/.bashrc;
   echo -e "alias backup2NFS='cd /home/${BIOUSER}/ && rsync -av --exclude rstudio-pass --no-owner --no-group --no-perms --omit-dir-times --progress ~/  ${NFS_HOME_PERSISTENT}/${BIOUSER}'" >> /home/"$BIOUSER"/.bashrc;
   echo -e "alias restoreFromNFS='cd /home/${BIOUSER}/ && rsync -av --exclude rstudio-pass --no-owner --no-group --no-perms --omit-dir-times --progress ${NFS_HOME_PERSISTENT}/${BIOUSER}/ ~/'" >> /home/"$BIOUSER"/.bashrc;
+
+  # virtualenv - E06
+  su - "${BIOUSER}" -c "/usr/bin/python3.5 -m pip install --upgrade --user virtualenv"
 fi
 
 if [[ "$MODE" == "all" ]] || [[ "$MODE" == "base" ]]; then
