@@ -13,7 +13,7 @@ CONF_DIR="$dirname"/conf
 
 # Used to create/prolong session
 MODE=
-MODELIST="keytab passwdfile cron destroy"
+MODELIST="keytab passwdfile cron destroy status"
 # Domain
 if [[ -z "$REALM" ]];then
   echo "Empty REALM from conf. file, exiting!"
@@ -136,7 +136,7 @@ checkpasswd() {
     INFO "Using password from file ./conf/.myNFSpassword"
     PASSWORD=$(cat ./conf/.myNFSpassword)
   else
-    if [[ ! "$MODE" == "cron" ]] && [[ ! "$MODE" == "destroy" ]];then
+    if [[ ! "$MODE" == "cron" ]] && [[ ! "$MODE" == "destroy" ]] && [[ ! "$MODE" == "status" ]];then
       # If mode is not cron, then fill in META password"
       read -s -p "Enter your Metacentrum Password to mount NFS storage: " PASSWORD
       if [[ "$MODE" == "passwdfile" ]];then
@@ -191,6 +191,17 @@ destroyall(){
 
 # Check if mounted and klist not expired
 checkstate
+
+if [[ "$MODE" == "status" ]];then
+  if [[ -n "$mounted" ]] && [[ -n "$nfslist" ]] && [[ -z "$nfsexpired" ]] && [[ -z "$klistuserexpired" ]] && [[ -z "$klistrootexpired" ]] && [[ -n "$keytab_exists" ]];then
+    OK "NFS check OK"
+    exit 0
+  else
+    ERROR "Error during NFS check!"
+    INFO "Consider to execute command stopNFS followed with startNFS to mount storage again."
+    exit 1
+  fi
+fi
 
 # Perform re/mount for selected mode
 if [[ "$MODE" == "destroy" ]];then
