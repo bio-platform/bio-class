@@ -32,6 +32,7 @@ There are only two steps to proceed with after instance launch using prepared im
     * In case of issues try to execute `stopNFS` and `startNFS` again
     * To backup you home directory with lesson results to NFS execute `backup2NFS`, to restore `restoreFromNFS`
       * (Nothing is deleted on the other side, add --delete in .bashrc alias if you wish to perform delete during rsync (For Experienced Users Only))
+    * After instance reboot execute `startNFS` again
 
 * Swith to HTTPS running command `startHTTPS`
     * By default Rstudio uses HTTP (unsecured) and is accesible on port 8787
