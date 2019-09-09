@@ -149,6 +149,11 @@ if ( [[ "$MODE" == "https" ]] || [[ "$MODE" == "restore" ]]);then
       if [[ $? -ne 0 ]];then
         ERROR "Unable to create directory ${NFS_HOME_PERSISTENT}/${USER}, check if NFS nounted correctly!"
       fi
+      INFO "Attempt to set group ${NFS_HOME_PERSISTENT_USER_GROUP_PERM} permissions on direcory ${NFS_HOME_PERSISTENT}/${USER}"
+      chown ${USER}:${NFS_HOME_PERSISTENT_USER_GROUP_PERM} ${NFS_HOME_PERSISTENT}/${USER}
+      if [[ $? -ne 0 ]];then
+        ERROR "Unable to set permission for ${NFS_HOME_PERSISTENT_USER_GROUP_PERM} on directory ${NFS_HOME_PERSISTENT}/${USER}, check if NFS nounted correctly!"
+      fi
     fi
   else
     ERROR "Unable to find NFS directory ${NFS_HOME_PERSISTENT}, check it please!"
