@@ -142,6 +142,22 @@ if [[ -z "$NFS_STORAGE_BACKUP_HTTPS_DIR" ]] && ( [[ "$MODE" == "https" ]] || [[ 
   exit 1
 fi
 if ( [[ "$MODE" == "https" ]] || [[ "$MODE" == "restore" ]]);then
+  if [[ -d "${NFS_HOME_PERSISTENT}" ]];then
+    if [[ -z `find "${NFS_HOME_PERSISTENT}" -maxdepth 1 -type d -path "${NFS_HOME_PERSISTENT}/${USER}"` ]];then
+      INFO "Attempt to create direcory ${NFS_HOME_PERSISTENT}/${USER}"
+      mkdir -p "${NFS_HOME_PERSISTENT}/${USER}"
+      if [[ $? -ne 0 ]];then
+        ERROR "Unable to create directory ${NFS_HOME_PERSISTENT}/${USER}, check if NFS nounted correctly!"
+      fi
+    fi
+  else
+    ERROR "Unable to find NFS directory ${NFS_HOME_PERSISTENT}, check it please!"
+    INFO "Consider to execute command startNFS before generating certificate."
+    exit 1
+  fi
+fi
+
+if ( [[ "$MODE" == "https" ]] || [[ "$MODE" == "restore" ]]);then
   if [[ -z `find "${NFS_HOME_PERSISTENT}" -maxdepth 1 -type d -path "${NFS_HOME_PERSISTENT}/${USER}"` ]];then
     ERROR "Unable to find NFS backup directory ${NFS_HOME_PERSISTENT}/${USER}, check it please!"
     INFO "Consider to execute command startNFS before generating certificate."
