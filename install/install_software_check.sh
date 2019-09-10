@@ -156,15 +156,26 @@ command_output=$(dpkg -s soapdenovo2 | egrep -B 1 "Status")
 command_status="$?"
 function_echo_output
 
+SW_NAME="conda"
+command_output=$(conda --version)
+command_status="$?"
+function_echo_output
+
 SW_NAME="BiocManager"
 command_output=$(Rscript -e "BiocManager::version()")
 command_status="$?"
 function_echo_output
 
-SW_NAME="conda"
-command_output=$(conda --version)
-command_status="$?"
-function_echo_output
+echo "--------Checking BiocManager packages installed, please wait---------"
+
+      spin='-\|/'
+      spin_i=0
+
+installed=""; failed="";for i in Biobase BiocParallel DESeq2 DT GOstats GOsummaries GenomicAlignments GenomicFeatures Heatplus KEGG.db PoiClaClu RColorBrewer ReportingTools Rsamtools Seurat affy airway annotate arrayQualityMetrics beadarray biomaRt dendextend gdata genefilter goseq gplots gtools hgu133plus2cdf hgu133plus2probe hgu133plus2.db hwriter illuminaHumanv3.db lattice limma lumi made4 oligo org.Hs.eg.db org.Mm.eg.db org.Rn.eg.db pander pd.rat230.2 pheatmap preprocessCore qvalue rat2302.db rmarkdown sva tidyverse vsn xtable tximport EnsDb.Hsapiens.v75 AnnotationHub clusterProfiler enrichplot pathview SPIA edgeR; do spin_i=$(( (spin_i+1) %4 )); echo -en "\e[0K\r (${spin:$spin_i:1}) Checking: $i\e[1A" ;z=$(Rscript -e "a<-installed.packages(); packages<-a[,1];is.element(\"${i}\",packages)"); t=$(echo "$z" | grep TRUE); [ -n "$t" ] && installed+=" ${i}"; [ -z "$t" ] && failed+=" ${i}";echo; done ; [ -n "$installed" ] && echo -e "\nInstalled: $installed"; [ -n "$failed" ] && echo -e "\nERROR: $failed";
+
+echo -e "\n--------Check if BiocManager need to update out-of-date packages---------"
+
+Rscript -e "BiocManager::valid()"
 
 # Checks
 
