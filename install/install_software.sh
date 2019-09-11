@@ -348,6 +348,8 @@ for(package in packages) {
   }
 }
 library(BiocManager)
+BiocManager::valid()
+BiocManager::install(update = TRUE, ask = FALSE)
 BiocManager::valid()" >> "$TMP_DIR"/bioconductor.r
   cd "${TMP_DIR}"; Rscript bioconductor.r
   cd "$SCRIPTDIR"
@@ -464,7 +466,7 @@ fi
 
 if [[ "$MODE" == "all" ]] || [[ "$MODE" == "post" ]];then
   # Set permissions for "$BIOUSER" account
-  for item in /opt/${name}/ $TMP_DIR /usr/lib/R/ /usr/share/R/; do
+  for item in /opt/${name}/ $TMP_DIR /usr/lib/R/ /usr/share/R/ /usr/local/lib/R/site-library; do
   chmod g+s "$item"; setfacl -dR -m g:"$BIOUSER":rwx "$item" ; setfacl -dR -m u:"$BIOUSER":rwx "$item" ;
   setfacl -R -m u:"$BIOUSER":rwx "$item" ;setfacl -R -m g:"$BIOUSER":rwx "$item" ;  done
   # Export PATH, ll alias
