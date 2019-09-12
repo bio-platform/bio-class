@@ -91,6 +91,11 @@ command_output=$(fastq_to_fasta -h | egrep "usage")
 command_status="$?"
 function_echo_output
 
+SW_NAME="fastx_collapser"
+command_output=$(fastx_collapser -h | egrep -A 1 "usage")
+command_status="$?"
+function_echo_output
+
 SW_NAME="minimap2"
 command_output=$(minimap2 --help | egrep "Usage")
 command_status="$?"
