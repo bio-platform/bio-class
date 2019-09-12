@@ -4,9 +4,10 @@
   "communicator": "ssh",
   "ssh_keypair_name": "packer-key",
   "ssh_private_key_file": "~/.ssh/packer_id_rsa",
-  "floating_ip": "65d08033-b7d5-44e5-8e05-6d7543502f39",
+  "floating_ip": "a295c4e1-147a-4553-a2e4-35fdacb7152c",
+  "networks": "f9768752-b0bd-4812-9af7-8622f9ac29e3",
   "ssh_username": "debian",
-  "image_name": "debian-9-x86_64_bioconductor",
+  "image_name": "debian-9-x86_64_bioconductor_new",
   "source_image": "7cba2bef-041b-45e4-b14f-ac6e035ff602",
   "flavor": "bbca574d-b0ea-4738-be73-a0ae0ac67a6d"
 }],

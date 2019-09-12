@@ -5,6 +5,7 @@
   "ssh_keypair_name": "<Select appropriate ID from command output: 'openstack keypair list' to match ssh_private_key_file>",
   "ssh_private_key_file": "<Local path to the private key used during SSH connection for provisioning>",
   "floating_ip": "<Select appropriate ID from command output: 'openstack floating ip list'>",
+  "networks": "<Select appropriate ID from command output: 'openstack network list'>",
   "ssh_username": "<Login used during SSH connection, for debian typically name debian>",
   "image_name": "<Name for new image>",
   "source_image": "<Select appropriate ID from command output: 'openstack image list'>",
