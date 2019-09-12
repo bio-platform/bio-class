@@ -455,13 +455,17 @@ if [[ "$MODE" == "all" ]] || [[ "$MODE" == "base" ]]; then
   # certbot
   echo "deb http://deb.debian.org/debian stretch-backports main" > /etc/apt/sources.list.d/backports.list
   update_sources ; apt-get -y install certbot python-certbot-nginx -t stretch-backports
-  # Cron to backup
-  echo -e "* 1,13 * * * ${BIOUSER} public_ipv4=\$(curl -s http://169.254.169.254/2009-04-04/meta-data/public-ipv4 2>/dev/null | grep -E -o \"([0-9]{1,3}[\.]){3}[0-9]{1,3}\");nginxconf=\$(grep cert.pem /etc/nginx/nginx.conf) ;[ -n \"\$public_ipv4\" ] && [ -n \"\$nginxconf\" ] && [ -d "${NFS_HOME_PERSISTENT}/${BIOUSER}/${NFS_STORAGE_BACKUP_HTTPS_DIR}" ] && cd /home/${BIOUSER}/HTTPS/ && /usr/bin/flock -w 10 /var/lock/bio-class/startHTTPS ./startHTTPS.sh -m backup >/dev/null 2>&1" > /etc/cron.d/backupHTTPS
+
   cp ${CONF_DIR}/index.nginx-debian.html /var/www/html/
   if [[ -f /var/www/html/index.nginx-debian.html ]];then
     chown root: /var/www/html/index.nginx-debian.html
     chmod 644 /var/www/html/index.nginx-debian.html
   fi
+fi
+
+if [[ "$MODE" == "all" ]] || [[ "$MODE" == "post" ]];then
+  # Cron for backup
+  echo -e "* 1,13 * * * ${BIOUSER} public_ipv4=\$(curl -s http://169.254.169.254/2009-04-04/meta-data/public-ipv4 2>/dev/null | grep -E -o \"([0-9]{1,3}[\.]){3}[0-9]{1,3}\");nginxconf=\$(grep cert.pem /etc/nginx/nginx.conf) ;[ -n \"\$public_ipv4\" ] && [ -n \"\$nginxconf\" ] && [ -d "${NFS_HOME_PERSISTENT}/${BIOUSER}/${NFS_STORAGE_BACKUP_HTTPS_DIR}" ] && cd /home/${BIOUSER}/HTTPS/ && /usr/bin/flock -w 10 /var/lock/bio-class/startHTTPS ./startHTTPS.sh -m backup >/dev/null 2>&1" > /etc/cron.d/backupHTTPS
 fi
 
 if [[ "$MODE" == "all" ]] || [[ "$MODE" == "post" ]];then
