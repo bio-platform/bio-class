@@ -44,7 +44,7 @@ There are only two steps to proceed with after instance launch using prepared im
     * Find out the current Rstudio URL using command `statusHTTPS`
 
 * Update R/Bioconductor packages
-    * Start `updateBIOSW` to update installed R/Bioconductor packages
+    * Execute `updateBIOSW` to update installed R/Bioconductor packages
 
 ### Tips
 If you use Shiny library then please [confirm pop-ups](doc/img/shiny_pop-ups.png).
