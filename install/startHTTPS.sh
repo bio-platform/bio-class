@@ -304,6 +304,25 @@ restart_services() {
 
 checkstate
 
+update_motd() {
+  if [[ -n "$chain_exists" ]] || [[ -n "$key_exists" ]] || [[ -n "$cert_path" ]] || [[ -n "$key_path" ]] || [[ -n "$FORCE" ]] && [[ -n "$nginx_conf_https" ]];then
+    RSTUDIO_URL="Rstudio available at https://${public_ipv4_name}"
+  elif [[ -n "$localcrt" ]] && [[ -n "$localkey" ]] && [[ -n "$nginx_conf_https_localcrt" ]];then
+    RSTUDIO_URL="Rstudio available at https://${public_ipv4_name}"
+  elif [[ -z "$nginx_conf_https" ]] && [[ -z "$nginx_conf_https_localcrt" ]];then
+    RSTUDIO_URL="Rstudio available at http://${public_ipv4}:8787"
+  fi
+  if [[ "$MODE" != "status" ]];then
+    INFO "$RSTUDIO_URL"
+    if [[ -z "$nginx_conf_https" ]] && [[ -z "$nginx_conf_https_localcrt" ]];then
+      ERROR "No certificate configured for HTTPS, please note that HTTP is unsecured!"
+    fi
+  fi
+  if [[ -n "$RSTUDIO_URL" ]];then
+    sudo sed -i "s|Rstudio available at.*using account|$RSTUDIO_URL using account|g" /etc/motd
+  fi
+}
+
 DEBUG "MODE: $MODE"
 if [[ "$MODE" == "status" ]];then
   DEBUG "chain_exists: $chain_exists"
@@ -522,6 +541,8 @@ elif [[ "$MODE" == "renew" ]];then
 
 fi
 
+checkstate
+update_motd
 
 # Exit
 exit 0
