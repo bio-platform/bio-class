@@ -43,6 +43,9 @@ There are only two steps to proceed with after instance launch using prepared im
     * To switch back to HTTP only use `stopHTTPS`
     * Find out the current Rstudio URL using command `statusHTTPS`
 
+* Update R/Bioconductor packages
+    * Start `updateBIOSW` to update installed R/Bioconductor packages
+
 ### Tips
 If you use Shiny library then please [confirm pop-ups](doc/img/shiny_pop-ups.png).
 
