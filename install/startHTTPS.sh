@@ -247,6 +247,8 @@ backup_certificate() {
   sudo rm /tmp/certBackup-${public_ipv4_2text}.tar.gz
   cd "$SCRIPTDIR"
 
+  DEBUG "Set permissions on all existing backups"
+  for file in `find "${NFS_HOME_PERSISTENT}/${USER}/${NFS_STORAGE_BACKUP_HTTPS_DIR}" -name certBackup\*`; do command_output=$(sudo chmod 600 $file); DEBUG "chmod $file" ; done
   DEBUG "Check after backup"
   remote_backup_exist_after_copy=$(find  "${NFS_HOME_PERSISTENT}/${USER}/${NFS_STORAGE_BACKUP_HTTPS_DIR}" -maxdepth 1 -type f -path "${NFS_HOME_PERSISTENT}/${USER}/${NFS_STORAGE_BACKUP_HTTPS_DIR}/certBackup-${public_ipv4_2text}.tar.gz")
   DEBUG "remote_backup_exist_after_copy: $remote_backup_exist_after_copy"
