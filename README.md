@@ -6,7 +6,7 @@ Repository for building virtual classroom for biology students using [OpenStack]
 * Genomics: algorithms and analysis class tought at Institute of Molecular Genetics of the ASCR, v. v. i.
 
 ## Image with installed software
-Use prepared image containing all required software is a preferred way. Some of steps below are covered by fronted application. In case of manual action, please [proceed with all required steps individually](./doc/user/launch-in-personal-project.md).
+Use prepared image containing all required software is a preferred way. Some of steps below are covered by [fronted application](http://bio-portal.metacentrum.cz). In case of manual action, please [proceed with all required steps individually](./doc/user/launch-in-personal-project.md).
 
 ### SSH Access
 Connect to the VM using your [login](https://cloud.gitlab-pages.ics.muni.cz/documentation/register/), [id_rsa key registered in Openstack](https://cloud.gitlab-pages.ics.muni.cz/documentation/quick-start/#create-key-pair) and [Floating IP](https://cloud.gitlab-pages.ics.muni.cz/documentation/quick-start/#associate-floating-ip):
