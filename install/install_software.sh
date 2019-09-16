@@ -507,7 +507,10 @@ echo \"channels:
   echo -e "alias startHTTPSlocalCrt='cd /home/${BIOUSER}/HTTPS && ./startHTTPS.sh -m localcrt'" >> /home/"$BIOUSER"/.bashrc;
   echo -e "alias backup2NFS='cd /home/${BIOUSER}/ && rsync -av --exclude rstudio-pass --no-owner --no-group --no-perms --omit-dir-times --progress ~/  ${NFS_HOME_PERSISTENT}/${BIOUSER}'" >> /home/"$BIOUSER"/.bashrc;
   echo -e "alias restoreFromNFS='cd /home/${BIOUSER}/ && rsync -av --exclude rstudio-pass --no-owner --no-group --no-perms --omit-dir-times --progress ${NFS_HOME_PERSISTENT}/${BIOUSER}/ ~/'" >> /home/"$BIOUSER"/.bashrc;
-  echo -e "alias statusBIOSW='/home/debian/bio-class/install/install_software_check.sh'" >> /home/"$BIOUSER"/.bashrc;
+  echo -e "alias statusBIOSW='/home/debian/bio-class/install/install_software_check.sh -m status'" >> /home/"$BIOUSER"/.bashrc;
+  echo -e "alias updateBIOSW='/home/debian/bio-class/install/install_software_check.sh -m updateBIOSW'" >> /home/"$BIOUSER"/.bashrc;
+  echo -e "alias updateOS='/home/debian/bio-class/install/install_software_check.sh -m updateOS'" >> /home/"$BIOUSER"/.bashrc;
+  echo -e "alias updateREPO='/home/debian/bio-class/install/install_software_check.sh -m updateREPO'" >> /home/"$BIOUSER"/.bashrc;
 
   # virtualenv - E06
   su - "${BIOUSER}" -c "/usr/bin/python3.5 -m pip install --upgrade --user virtualenv"
