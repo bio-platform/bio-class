@@ -45,11 +45,10 @@ There are only two steps to proceed with after instance launch using prepared im
 
 * Update R/Bioconductor packages
     * Execute `statusBIOSW` to see installed/out-of-date packages
-    * Open Tmux session using `tmux` or attach to the existing Tmux session by `tmux attach`
+    * Open Tmux session using `tmux` or attach to the existing Tmux session by `tmux attach`. Tmux can prevent updates break if your local computer for example loose connection. Another example is executing bash commands with long run time when Tmux can save your time.
     * Execute `updateBIOSW` to update installed R/Bioconductor packages
     * You can leave Tmux session now `Ctl+B+D` (not closing the session using `Ctrl+D`), because commands can continue in Tmux without your SSH connection active
     * Check if updates has finished by attaching Tmux session using `tmux attach`, check output and close Tmux session using `Ctrl+D` if updates has finished already
-    * Tmux can prevent updates break if your local computer for example loose connection
 
 
 ### Tips
