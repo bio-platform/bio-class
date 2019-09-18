@@ -22,7 +22,7 @@ Password is located at file `/home/<login>/rstudio-pass`.
 
 All required steps are listed in MOTD after login.
 
-### NFS and HTTPS
+### NFS, HTTPS and Updates
 There are only two steps to proceed with after instance launch using prepared image:
 * Start NFS running command `startNFS`
     * Project directory is located under /storage/projects/bioconductor/ on frontend and exported as /data/ on VM
