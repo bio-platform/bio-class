@@ -6,10 +6,10 @@ Repository for building virtual classroom for biology students using [OpenStack]
 * Genomics: algorithms and analysis class tought at Institute of Molecular Genetics of the ASCR, v. v. i.
 
 ## Image with installed software
-Use prepared image containing all required software is a preferred way. Some of steps below are covered by [fronted application](http://bio-portal.metacentrum.cz). In case of manual action, please [proceed with all required steps individually](./doc/user/launch-in-personal-project.md).
+Use prepared image containing all required software is a preferred way. Some of steps below are covered by [fronted application](http://bio-portal.metacentrum.cz) with guide available [here](doc/user/frontend.md). In case of manual action, please [proceed with all required steps individually](./doc/user/launch-in-personal-project.md).
 
 ### SSH Access
-Connect to the VM using your [login](https://cloud.gitlab-pages.ics.muni.cz/documentation/register/), [id_rsa key registered in Openstack](https://cloud.gitlab-pages.ics.muni.cz/documentation/quick-start/#create-key-pair) and [Floating IP](https://cloud.gitlab-pages.ics.muni.cz/documentation/quick-start/#associate-floating-ip):
+Connect to the VM using your [login](https://cloud.gitlab-pages.ics.muni.cz/documentation/register/), [id_rsa key registered in Openstack](https://cloud.gitlab-pages.ics.muni.cz/documentation/quick-start/#create-key-pair) or see [Key pair check](./doc/user/launch-in-personal-project.md#key-pair) and [Floating IP in Openstack](https://cloud.gitlab-pages.ics.muni.cz/documentation/quick-start/#associate-floating-ip) or see [Floating IP check](./doc/user/launch-in-personal-project.md#floating-ip):
 ```
 ssh -A -X -i ~/.ssh/id_rsa login@<Floating IP>
 ```

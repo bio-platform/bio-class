@@ -9,7 +9,8 @@ Using prepared image is a preferred way. Frontend appliacation is prepared to fu
       * If other setting, then use button *Clear Gateway*, confirm *Clear Gateway*
       * Select network *public-cesnet-78-128-250-PERSONAL* and *Submit*
       ![Routers](./../img/network_routers.png)
-    * Check if Floating IP exists
+    * ### Floating IP
+      * Check if Floating IP exists
       * Open Project -> Network -> Floating IPs
       * If *No item to display* then use button *Allocate IP To Project*
       * Select *public-cesnet-78*128*250-PERSONAL* and confirm using button *Allocate IP*
@@ -36,7 +37,7 @@ Using prepared image is a preferred way. Frontend appliacation is prepared to fu
     ![Select Flavor](./../img/instance_launch_flavor.png)
     * Select Network *78-128-250-pers-proj-net* - *personal-project-network-subnet*
     ![Select Network](./../img/instance_launch_network.png)
-    * Key pair
+    * ### Key pair
       * **If public key imported already**, add existing key to the instance and continue using button **Next**
       * **Import Key Pair** if existing SSH key on your local computer, but not listed as available, then import public key using button **Import Key**
         * Insert Key Pair Name
