@@ -92,7 +92,7 @@ openstack security group rule create --description "Permit SSH" --remote-ip ${RO
 * Check used ID inside the template packer_template.JSON
 * If private repository, then check private/public keys
 * Start building image: `sleep 80; packer build packer_template.JSON`
-* Leave Tmux session (Ctl+B+D), not closing the session using Ctrl+D
+* Leave Tmux session (Ctrl+B D), not closing the session using Ctrl+D
 * Logout from VM
 * Disassociate a Floating IP from an instance
 
