@@ -42,12 +42,15 @@ sed -i 's/# alias ll=\x27ls \$LS_OPTIONS -l\x27/alias ll=\x27ls \$LS_OPTIONS -al
 apt-get -y install mc vim git dpkg-dev apt-transport-https ca-certificates dirmngr
 
 if [[ "$PRIVATE_REPO" == "true" ]];then
-  # Private key for deploy keys
+  # Using deploy key to access Github private repository
+  # Private key for deploy key, NOT your personal private key!
+  # This part is not necessary if repository public
   echo -e "-----BEGIN RSA PRIVATE KEY-----
 ...INSERT PRIVATE KEY AS DEPLOY KEY HERE...
 -----END RSA PRIVATE KEY-----" > /root/.ssh/id_rsa
 
   # Public key for deploy keys
+  # This part is not necessary if repository public
   echo -e "...INSERT PUBLIC KEY FOR DEPLOY KEY HERE..." > /root/.ssh/id_rsa.pub
 
   echo -e "# GitLab.com server
