@@ -15,7 +15,7 @@ Using prepared image is a preferred way. Frontend appliacation is prepared to fu
       * If *No item to display* then use button *Allocate IP To Project*
       * Select *public-cesnet-78*128*250-PERSONAL* and confirm using button *Allocate IP*
     ![Check Floating IP](./../img/network_floating_ip.png)
-    * Manage Security Group Rules
+    * ### Manage Security Group Rules
       * Open Project -> Network -> Security Groups
       * Check if present rules (SSH, HTTP, HTTPS, Egress IPv4 Any Any 0.0.0.0/0), otherwise add new rule using button *Add Rule*
         * Ingress         IPv4    TCP     22 (SSH)        0.0.0.0/0

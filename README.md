@@ -22,7 +22,7 @@ Password is located at file `/home/<login>/rstudio-pass`.
 
 All required steps are listed in MOTD after login.
 
-### NFS, HTTPS and Updates
+### First steps after login (NFS, HTTPS and Updates)
 There are only two steps to proceed with after instance launch using prepared image:
 * Start NFS running command `startNFS`
     * Project directory is located under /storage/projects/bioconductor/ on frontend and exported as /data/ on VM
@@ -57,9 +57,12 @@ There are only two steps to proceed with after instance launch using prepared im
     * Write down your issue and confirm using button "Vytvořit/Create"
 
 ### Tips
-If you use Shiny library then please [confirm pop-ups](doc/img/shiny_pop-ups.png).
 
-In [Security Group add rules](https://cloud.gitlab-pages.ics.muni.cz/documentation/quick-start/#update-security-group) add rules:
+#### Shiny do not open
+* If you use Shiny library then please [confirm pop-ups](doc/img/shiny_pop-ups.png).
+
+#### Security Groups
+In [Security Group add rules](https://cloud.gitlab-pages.ics.muni.cz/documentation/quick-start/#update-security-group) add rules ([guide here](./doc/user/launch-in-personal-project.md#manage-security-group-rules)):
 * For SSH to `<your computer private IPv4 address>/32` or allow it from anywhere `0.0.0.0/0`
 * HTTP and HTTPS to allow Ingress availability from anywhere `0.0.0.0/0` (required for generate certificate using port 80)
 ```
@@ -67,6 +70,28 @@ Ingress         IPv4    TCP     22 (SSH)        <your private IPv4 address>/32  
 Ingress         IPv4    TCP     80 (HTTP)       0.0.0.0/0       -       -
 Ingress         IPv4    TCP     443 (HTTPS)     0.0.0.0/0       -       -
 Egress	        IPv4 	Any 	Any 	0.0.0.0/0
+```
+
+In case of ping do not work add rule:
+```
+Ingress 	IPv4 	ICMP 	Any 	0.0.0.0/0
+```
+
+#### HTTPS certificate check
+
+In case of issue to renew certificate for HTTPS
+* Cron job or systemd timer renew your certificates automatically
+```
+cat /etc/cron.d/certbot
+systemctl list-timers | egrep certbot.timer
+```
+* Check current certificate
+```
+sudo certbot certificates
+```
+* Test automatic renewal
+```
+sudo certbot renew --dry-run
 ```
 
 ## Admin section
