@@ -50,6 +50,11 @@ There are only two steps to proceed with after instance launch using prepared im
     * You can leave Tmux session now `Ctl+B+D` (not closing the session using `Ctrl+D`), because commands can continue in Tmux without your SSH connection active
     * Check if updates has finished by attaching Tmux session using `tmux attach`, check output and close Tmux session using `Ctrl+D` if updates has finished already
 
+* Support
+  * Send email to cloud@metacentrum.cz
+  * Use Request tracker to [create new ticket](https://rt.cesnet.cz/rt/Ticket/Create.html?Queue=27&Subject=Bioconductor&Content=Issue%20with%20Bioconductor)
+    * After login follow the link "klikněte zde pro povedení Vaší žádosti/click here to resume your request"
+    * Write down your issue and confirm using button "Vytvořit/Create"
 
 ### Tips
 If you use Shiny library then please [confirm pop-ups](doc/img/shiny_pop-ups.png).
