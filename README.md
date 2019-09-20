@@ -45,10 +45,19 @@ There are only two steps to proceed with after instance launch using prepared im
 
 * Update R/Bioconductor packages
     * Execute `statusBIOSW` to see installed/out-of-date packages
-    * Open Tmux session using `tmux` or attach to the existing Tmux session by `tmux attach`. Tmux can prevent updates break if your local computer for example loose connection. Another example is executing bash commands with long run time when Tmux can save your time.
-    * Execute `updateBIOSW` to update installed R/Bioconductor packages
-    * You can leave Tmux session now `Ctl+B D` (not closing the session using `Ctrl+D`), because commands can continue in Tmux without your SSH connection active
-    * Check if updates has finished by attaching Tmux session using `tmux attach`, check output and close Tmux session using `Ctrl+D` if updates has finished already
+    * Execute `updateBIOSW` directly if stable SSH connection
+      * (optional) You may open Tmux session using `tmux` or attach to the existing Tmux session by `tmux attach`. Tmux can prevent updates break if your local computer for example loose connection. Another example is executing bash commands with long run time when Tmux can save your time.
+      * (optional) Execute `updateBIOSW` to update installed R/Bioconductor packages
+      * (optional) You can leave Tmux session now `Ctl+B D` (not closing the session using `Ctrl+D`), because commands can continue in Tmux without your SSH connection active
+      * (optional) Check if updates has finished by attaching Tmux session using `tmux attach`, check output and close Tmux session using `Ctrl+D` if updates has finished already
+    * Check if updates has finished
+
+* Update OS
+  * Backup your home directory to NFS executing `backup2NFS` before updating OS
+  * Use Tmux as above if unstable SSH session or execute directly `updateOS`
+
+* Update repository
+  * To obtain latest changes of this repository execute `updateREPO`
 
 * Support
   * Send email to [cloud@metacentrum.cz](mailto:cloud@metacentrum.cz?subject=Bioconductor), do not forget to mention Bioconductor in Subject field

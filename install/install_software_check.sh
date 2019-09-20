@@ -14,6 +14,12 @@ LIB_DIR="$dirname"/../lib
 MODE=
 MODELIST="status updateOS updateBIOSW updateREPO"
 
+# Include global Conf
+. $CONF_DIR/.conf
+
+#common_functions
+. $LIB_DIR/common_functions
+
 USER=$(whoami)
 function_logger () {
     local tmp=$(echo "$1"| tr -s '\r\n' ';' |  sed '/^$/d')
@@ -58,6 +64,12 @@ while getopts ":m:v:" opt; do
       ;;
   esac
 done
+
+BIOUSER=$(curl -s  http://169.254.169.254/openstack/2016-06-30/meta_data.json 2>/dev/null | python -m json.tool | egrep -i Bioclass_user |cut -f 2 -d ':' | tr -d ' ' | tr -d '"' | tr '[:upper:]' '[:lower:]')
+if [[ -z "$BIOUSER" ]]; then
+  echo "Empty Bioclass_user from METADATA, exiting!"
+  exit 1
+fi
 
 # Checks
 
@@ -239,18 +251,78 @@ elif [[ "$MODE" == "updateBIOSW" ]];then
   echo -e "\n--------Check if BiocManager valid or need to update out-of-date packages---------"
   sudo Rscript -e "BiocManager::valid()"
 
-  echo -e "\n--------Update installed BIOSW comming soon---------"
+  #echo -e "\n--------Update installed BIOSW - in development---------"
 
 elif [[ "$MODE" == "updateOS" ]];then
   echo -e "\n--------Update OS---------"
   sudo apt-get update
-  sudo apt-get -y upgrade
+  sudo DEBIAN_FRONTEND=noninteractive apt-get -y upgrade
 
 elif [[ "$MODE" == "updateREPO" ]];then
   echo -e "\n--------Update bio-class repository---------"
-  cd /home/debian/bio-class && sudo git pull --rebase
 
-  echo -e "\n--------Update maintenance scripts comming soon---------"
+    echo "BIOUSER: $BIOUSER"
+    echo "SCRIPTDIR: $SCRIPTDIR"
+    echo "CONF_DIR: $CONF_DIR"
+
+  cd /home/debian/bio-class && sudo git pull --rebase
+  if [[ $? -ne 0 ]];then
+    cd /home/debian/bio-class && sudo git status
+    # Backup repo
+    if [[ -d /home/debian/bio-class ]];then
+      echo "Moving repository to /home/debian/bio-class-backup"
+      if [[ -d /home/debian/bio-class-backup ]];then
+        sudo rm -rf /home/debian/bio-class-backup
+      fi
+        sudo mv /home/debian/bio-class /home/debian/bio-class-backup
+      fi
+
+    fi
+    # Clone public repo
+    cd "/home/debian/"
+    sudo git clone https://github.com/bio-platform/bio-class.git 2>&1
+  fi
+
+  cd /home/debian/;
+  if [[ ! -d /home/debian/bio-class ]];then
+    if [[ -d /home/debian/bio-class-backup ]];then
+      echo "ERROR to clone repository, using repository from image. Not updating configuration/scripts!"
+      sudo mv /home/debian/bio-class-backup /home/debian/bio-class
+    fi
+  else
+    #if [[ -d /home/debian/bio-class-backup ]];then
+    #  sudo rm -rf /home/debian/bio-class-backup
+    #fi
+
+    echo -e "\n--------Update conf. files, service scripts---------"
+    # Custom script to renew kerberos tickets
+    sudo mkdir -p /var/lock/bio-class; cd /var/lock/; chown "${BIOUSER}": ./bio-class/
+    echo -e "*/15 * * * * ${BIOUSER} cd /home/${BIOUSER}/NFS/ && /usr/bin/flock -w 10 /var/lock/bio-class/startNFS ./startNFS.sh -m cron >/dev/null 2>&1" | sudo tee /etc/cron.d/checkNFS
+    cd "$SCRIPTDIR"
+    sudo mkdir -p /home/"${BIOUSER}"/NFS/conf
+    sudo cp ${SCRIPTDIR}/startNFS.sh /home/"${BIOUSER}"/NFS
+    sudo cp ${CONF_DIR}/.conf /home/"${BIOUSER}"/NFS/conf
+    sudo chown "${BIOUSER}": /home/"${BIOUSER}"/NFS -R
+    sudo chmod +x /home/"${BIOUSER}"/NFS/startNFS.sh
+    # Group for bioconductor
+    sudo groupadd bioconductor
+    sudo usermod -a -G bioconductor "${BIOUSER}"
+    groups "${BIOUSER}"
+    # RStudio Server: Running with a Proxy
+    sudo mkdir -p /home/"${BIOUSER}"/HTTPS/conf
+    sudo cp ${SCRIPTDIR}/startHTTPS.sh /home/"${BIOUSER}"/HTTPS
+    sudo chown "${BIOUSER}": /home/"${BIOUSER}"/HTTPS -R
+    sudo chmod +x /home/"${BIOUSER}"/HTTPS/startHTTPS.sh
+    for file in ${CONF_DIR}/.conf ${CONF_DIR}/nginx.conf ${CONF_DIR}/nginx.conf.clean ${CONF_DIR}/rserver.conf.clean ; do \
+    sudo cp $file /home/"${BIOUSER}"/HTTPS/conf ; done
+    sudo chmod 644 /home/"${BIOUSER}"/HTTPS/conf/* ; sudo chown root: /home/"${BIOUSER}"/HTTPS/conf/*
+    echo -e "\n--------Finished to update conf. files, service scripts---------"
+  fi
+
+  echo "List last 10 commits"
+  cd /home/debian/bio-class && git log --pretty=format:"%cd %s" | head -n 10
+
+  #echo -e "\n--------Update maintenance scripts - in development---------"
 fi
 
 exit 0
