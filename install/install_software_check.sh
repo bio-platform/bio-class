@@ -65,6 +65,8 @@ while getopts ":m:v:" opt; do
   esac
 done
 
+echo "MODE: $MODE"
+
 BIOUSER=$(curl -s  http://169.254.169.254/openstack/2016-06-30/meta_data.json 2>/dev/null | python -m json.tool | egrep -i Bioclass_user |cut -f 2 -d ':' | tr -d ' ' | tr -d '"' | tr '[:upper:]' '[:lower:]')
 if [[ -z "$BIOUSER" ]]; then
   echo "Empty Bioclass_user from METADATA, exiting!"
@@ -274,8 +276,7 @@ elif [[ "$MODE" == "updateREPO" ]];then
       if [[ -d /home/debian/bio-class-backup ]];then
         sudo rm -rf /home/debian/bio-class-backup
       fi
-        sudo mv /home/debian/bio-class /home/debian/bio-class-backup
-      fi
+      sudo mv /home/debian/bio-class /home/debian/bio-class-backup
 
     fi
     # Clone public repo
