@@ -51,6 +51,7 @@ There are only two steps to proceed with after instance launch using prepared im
 * Update OS
   * Backup your home directory to NFS executing `backup2NFS` before updating OS
   * Execute `updateOS` or execute inside Tmux (if unstable SSH session)
+  * Please note, that instance may be rebooted immediately after update
 
 * Update repository
   * To obtain latest changes of this repository execute `updateREPO`
