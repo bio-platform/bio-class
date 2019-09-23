@@ -25,10 +25,10 @@ All required steps are listed in MOTD after login.
 ### First steps after login (NFS, HTTPS and Updates)
 There are only two steps to proceed with after instance launch using prepared image:
 * Start NFS running command `startNFS`
-    * Project directory is located under /storage/projects/bioconductor/ on frontend and exported as /data/ on VM
-    * There are 2 directories present:
-      * persistent - contains home directories for each BIO class user
-      * shared - contains shared data for BIO class
+    * Project directory is located under /data/ on your instance and /storage/projects/bioconductor/ on [frontend](https://wiki.metacentrum.cz/wiki/Frontend)
+      * There are 2 directories present:
+        * /data/persistent - contains home directories for each BIO class user
+        * /data/shared - contains shared data for BIO class
     * In case of issues try to execute `stopNFS` and `startNFS` again
     * To backup you home directory with lesson results to NFS execute `backup2NFS`, to restore `restoreFromNFS`
       * (Nothing is deleted on the other side, add --delete in .bashrc alias if you wish to perform delete during rsync (For Experienced Users Only))
