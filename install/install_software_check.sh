@@ -258,8 +258,16 @@ elif [[ "$MODE" == "updateBIOSW" ]];then
 elif [[ "$MODE" == "updateOS" ]];then
   echo -e "\n--------Update OS---------"
   sudo apt-get update
-  sudo DEBIAN_FRONTEND=noninteractive apt-get -y upgrade
-
+  sudo DEBIAN_FRONTEND=noninteractive apt-get -y upgrade | tee /tmp/uptateOS4reboot.txt
+  reboot_needed=$(cat /tmp/uptateOS4reboot.txt | egrep -i "\breboot\b")
+  if [[ -n "$reboot_needed" ]];then
+    echo "Reboot needed after upgrade, going to reboot now!
+---------Please do not forget to startNFS after instance boot---------"
+    if [[ -f /tmp/uptateOS4reboot.txt ]];then
+      rm -rf /tmp/uptateOS4reboot.txt
+    fi
+    sudo reboot
+  fi
 elif [[ "$MODE" == "updateREPO" ]];then
   echo -e "\n--------Update bio-class repository---------"
 
