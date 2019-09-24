@@ -32,7 +32,7 @@ There are only two steps to proceed with after instance launch using prepared im
     * In case of issues try to execute `stopNFS` and `startNFS` again
     * To backup you home directory with lesson results to NFS execute `backup2NFS`, to restore `restoreFromNFS`
       * (Nothing is deleted on the other side, add --delete in .bashrc alias if you wish to perform delete during rsync (For Experienced Users Only))
-    * After instance reboot execute `startNFS` again
+    * After instance reboot execute check `statusNFS`, if issue to list shared data then execute `startNFS` again
 
 * Swith to HTTPS running command `startHTTPS`
     * By default Rstudio uses HTTP (unsecured) and is accesible on port 8787
@@ -81,7 +81,6 @@ ssh-keygen -f ~/.ssh/known_hosts -R "<Floating IP>"
 ```
 export DISPLAY=localhost:0.0
 ssh -A -X -i ~/.ssh/id_rsa <login>@<Floating IP>
-
 ```
 
 Test X11 forwarding from instance
@@ -96,6 +95,12 @@ xterm
 
 ```
 sudo reboot
+```
+
+Do not forget do check NFS after reboot, if issue to list shared data then execute `startNFS`
+```
+statusNFS
+startNFS
 ```
 
 * If you use Shiny library and Shiny do not open then please [confirm pop-ups](doc/img/shiny_pop-ups.png). 
