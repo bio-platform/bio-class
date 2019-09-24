@@ -15,6 +15,8 @@ echo "Install patch if needed"
 
 # Patch
 
+# R library
+for package in rlist ggthemes heatmaply ggpubr; do Rscript -e "install.packages(\"${package}\")"; done
 
 # Patch
 
