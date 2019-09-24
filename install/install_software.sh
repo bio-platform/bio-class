@@ -322,7 +322,7 @@ fi
 if ([[ -n "$BIOSW_RSTUDIO" ]] && [[ "$MODE" == "all" ]]) || [[ "$MODE" == "base" ]];then
   #R packages
   echo -e "#!/usr/bin/Rscript
-install.packages(c(\"shiny\",\"devtools\",\"rsconnect\",\"httpuv\",\"rmarkdown\"))" >> "$TMP_DIR"/rstudiopackages.r
+install.packages(c(\"shiny\",\"devtools\",\"rsconnect\",\"httpuv\",\"rmarkdown\",\"rlist\",\"ggthemes\",\"heatmaply\",\"ggpubr\"))" >> "$TMP_DIR"/rstudiopackages.r
   cd "${TMP_DIR}"; Rscript rstudiopackages.r
   cd "$SCRIPTDIR"
 fi
@@ -537,6 +537,10 @@ if [[ "$MODE" == "all" ]] || [[ "$MODE" == "base" ]]; then
   sed -i '/^Ciphers .*/a MACs hmac-sha2-512-etm@openssh.com,hmac-sha2-256-etm@openssh.com,umac-128-etm@openssh.com' /etc/ssh/ssh_config ;
   sed -i '/^MACs .*/a HostKeyAlgorithms ssh-rsa,rsa-sha2-512,rsa-sha2-512,rsa-sha2-512' /etc/ssh/ssh_config ;
   sed -i 's/#   ForwardX11Trusted yes/ForwardX11Trusted yes/g' /etc/ssh/ssh_config ;
+
+  # OS update
+  update_sources ; DEBIAN_FRONTEND=noninteractive apt-get -y upgrade
+
 fi
 
 if [[ "$MODE" == "all" ]] || [[ "$MODE" == "base" ]] || [[ "$MODE" == "post" ]]; then
