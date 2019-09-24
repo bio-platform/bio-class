@@ -11,7 +11,7 @@ Use prepared image debian-9-x86_64_bioconductor containing all required software
 ### SSH Access
 Connect to the instance using your [login](https://cloud.gitlab-pages.ics.muni.cz/documentation/register/), [id_rsa key registered in Openstack](https://cloud.gitlab-pages.ics.muni.cz/documentation/quick-start/#create-key-pair) or see [Key pair check](./doc/user/launch-in-personal-project.md#key-pair) and [Floating IP in Openstack](https://cloud.gitlab-pages.ics.muni.cz/documentation/quick-start/#associate-floating-ip) or see [Floating IP check](./doc/user/launch-in-personal-project.md#floating-ip):
 ```
-ssh -A -X -i ~/.ssh/id_rsa login@<Floating IP>
+ssh -A -X -i ~/.ssh/id_rsa <login>@<Floating IP>
 ```
 ```
 -A      Enables forwarding of the authentication agent connection.
@@ -20,7 +20,7 @@ ssh -A -X -i ~/.ssh/id_rsa login@<Floating IP>
 
 Password is located at file `/home/<login>/rstudio-pass`.
 
-All required steps are listed in MOTD after login.
+All required steps are listed in MOTD after login including password.
 
 ### First steps after login (NFS, HTTPS and Updates)
 There are only two steps to proceed with after instance launch using prepared image:
@@ -66,10 +66,85 @@ There are only two steps to proceed with after instance launch using prepared im
     * After login follow the link "klikněte zde pro povedení Vaší žádosti/click here to resume your request"
     * Write down your issue and confirm using button "Vytvořit/Create"
 
-### Tips
+### Tips/FAQ
 
-#### Shiny do not open
-* If you use Shiny library then please [confirm pop-ups](doc/img/shiny_pop-ups.png).
+#### SSH
+
+* If *WARNING: REMOTE HOST IDENTIFICATION HAS CHANGED!* then remove known_hosts record from previous instances before connecting from your computer
+
+```
+ssh-keygen -f ~/.ssh/known_hosts -R "<Floating IP>"
+```
+
+* If *No X11 DISPLAY variable was set, but this program performed an operation which requires it* during fastqc executing then run command below before connecting to instance. Remove known_hosts record from previous instances also.
+
+```
+export DISPLAY=localhost:0.0
+ssh -A -X -i ~/.ssh/id_rsa <login>@<Floating IP>
+
+```
+
+Test X11 forwarding from instance
+```
+xclock
+xterm
+```
+
+#### Rstudio
+
+* If *rstudio Error: Unable to establish connection with R session* or *Unable to establish connection with R session* then restart instance. For example excercise E05 cosumes almost all of available memory so reboot before this excercise is good idea.
+
+```
+sudo reboot
+```
+
+* If you use Shiny library and Shiny do not open then please [confirm pop-ups](doc/img/shiny_pop-ups.png). 
+
+Test Shiny in Rstudio Console
+
+```
+library(shiny)
+runExample("01_hello")
+```
+
+* Show library vignette in Rstudio Console
+
+```
+vignette("grid")
+vignette("annotate")
+```
+
+#### Conda [Managing packages](https://docs.conda.io/projects/conda/en/latest/user-guide/tasks/manage-pkgs.html)
+
+Start Conda
+```
+startConda
+```
+
+List of packages
+```
+conda list
+```
+
+Update Conda
+```
+conda update conda
+```
+
+Search a package
+```
+conda search cnvkit
+```
+
+Install new package
+```
+conda install scipy
+```
+
+Stop Conda
+```
+stopConda
+```
 
 #### Security Groups
 In [Security Group add rules](https://cloud.gitlab-pages.ics.muni.cz/documentation/quick-start/#update-security-group) add rules ([guide here](./doc/user/launch-in-personal-project.md#manage-security-group-rules)):
