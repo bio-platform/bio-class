@@ -91,7 +91,7 @@ xterm
 
 #### Rstudio
 
-* If *rstudio Error: Unable to establish connection with R session* or *Unable to establish connection with R session* then restart instance. For example excercise E05 cosumes almost all of available memory so reboot before this excercise is good idea.
+* If *rstudio Error: Unable to establish connection with R session* or *Unable to establish connection with R session* then restart instance. For example excercise AGE E05 consumes almost all of available memory so reboot before this excercise is good idea.
 
 ```
 sudo reboot
@@ -154,7 +154,7 @@ stopConda
 #### Security Groups
 In [Security Group add rules](https://cloud.gitlab-pages.ics.muni.cz/documentation/quick-start/#update-security-group) add rules ([guide here](./doc/user/launch-in-personal-project.md#manage-security-group-rules)):
 * For SSH to `<your computer private IPv4 address>/32` or allow it from anywhere `0.0.0.0/0`
-* HTTP and HTTPS to allow Ingress availability from anywhere `0.0.0.0/0` (required for generate certificate using port 80)
+* HTTP and HTTPS to allow Ingress availability from anywhere `0.0.0.0/0` (required for generate certificate using response on port 80)
 ```
 Ingress         IPv4    TCP     22 (SSH)        <your private IPv4 address>/32       -       -
 Ingress         IPv4    TCP     80 (HTTP)       0.0.0.0/0       -       -
