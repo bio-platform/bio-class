@@ -227,8 +227,8 @@ elif [[ "$MODE" == "keytab" ]];then
     ssh "$USER"@"$FRONTEND" 'kdestroy -A'
     DEBUG "Initilazize at frontend
     echo "$PASSWORD"| ssh "$USER"@"$FRONTEND" 'kinit'
-    #ssh "$USER"@"${FRONTEND}" '/software/remctl-2.12/bin/remctl -d kdccesnet.ics.muni.cz accounts nfskeytab >krb5.keytab'
-    echo -e "${PASSWORD}\n${PASSWORD}" | ssh "$USER"@"${FRONTEND}" 'ktutil -k krb5.keytab add -p '"$USER"'@'"$REALM"' -e aes256-cts -V 1'
+    ssh "$USER"@"${FRONTEND}" '/software/remctl-2.12/bin/remctl -d kdccesnet.ics.muni.cz accounts nfskeytab >krb5.keytab'
+    #echo -e "${PASSWORD}\n${PASSWORD}" | ssh "$USER"@"${FRONTEND}" 'ktutil -k krb5.keytab add -p '"$USER"'@'"$REALM"' -e aes256-cts -V 1'
     INFO "Copying krb5.keytab"
     scp "$USER"@"${FRONTEND}:${FRONTEND_HOME}/${USER}"/krb5.keytab .
     sudo mv krb5.keytab /etc/krb5.keytab
@@ -250,10 +250,10 @@ elif [[ "$MODE" == "keytab" ]];then
     ssh "$USER"@"$FRONTEND" 'kdestroy -A'
 
     # crontab after reboot
-    crontab_exists=$(crontab -l 2>/dev/null | egrep "krb5.keytab")
-    if [[ -z "$crontab_exists" ]];then
-      (crontab -l 2>/dev/null || true; echo "@reboot [ -f /etc/krb5.keytab ] && kinit -t /etc/krb5.keytab && sudo kinit -k -t /etc/krb5.keytab "$USER"@"$REALM" && sudo mount -a") | crontab -
-    fi
+    #crontab_exists=$(crontab -l 2>/dev/null | egrep "krb5.keytab")
+    #if [[ -z "$crontab_exists" ]];then
+    #  (crontab -l 2>/dev/null || true; echo "@reboot [ -f /etc/krb5.keytab ] && kinit -t /etc/krb5.keytab && sudo kinit -k -t /etc/krb5.keytab "$USER"@"$REALM" && sudo mount -a") | crontab -
+    #fi
 
     remount=1
   fi
