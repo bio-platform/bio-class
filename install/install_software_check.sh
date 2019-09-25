@@ -306,7 +306,7 @@ elif [[ "$MODE" == "updateREPO" ]];then
     echo -e "\n--------Update conf. files, service scripts---------"
     # Custom script to renew kerberos tickets
     sudo mkdir -p /var/lock/bio-class; cd /var/lock/; sudo chown "${BIOUSER}": ./bio-class/
-    echo -e "*/15 * * * * ${BIOUSER} cd /home/${BIOUSER}/NFS/ && /usr/bin/flock -w 10 /var/lock/bio-class/startNFS ./startNFS.sh -m cron >/dev/null 2>&1" | sudo tee /etc/cron.d/checkNFS
+    echo -e "*/15 * * * * ${BIOUSER} mkdir -p /var/lock/bio-class/ && cd /var/lock/ && chown "${BIOUSER}": ./bio-class/ && cd /home/${BIOUSER}/NFS/ && /usr/bin/flock -w 10 /var/lock/bio-class/startNFS ./startNFS.sh -m cron >/dev/null 2>&1" | sudo tee /etc/cron.d/checkNFS
     cd "$SCRIPTDIR"
     sudo mkdir -p /home/"${BIOUSER}"/NFS/conf
     sudo cp ${SCRIPTDIR}/startNFS.sh /home/"${BIOUSER}"/NFS
