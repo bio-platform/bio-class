@@ -428,7 +428,7 @@ fi
 if [[ "$MODE" == "all" ]] || [[ "$MODE" == "post" ]];then
   # Custom script to renew kerberos tickets
   mkdir -p /var/lock/bio-class; cd /var/lock/; chown "${BIOUSER}": ./bio-class/
-  echo -e "*/15 * * * * ${BIOUSER} cd /home/${BIOUSER}/NFS/ && /usr/bin/flock -w 10 /var/lock/bio-class/startNFS ./startNFS.sh -m cron >/dev/null 2>&1" > /etc/cron.d/checkNFS
+  echo -e "*/15 * * * * ${BIOUSER} mkdir -p /var/lock/bio-class/ && cd /var/lock/ && chown "${BIOUSER}": ./bio-class/ && cd /home/${BIOUSER}/NFS/ && /usr/bin/flock -w 10 /var/lock/bio-class/startNFS ./startNFS.sh -m cron >/dev/null 2>&1" > /etc/cron.d/checkNFS
   cd "$SCRIPTDIR"
   mkdir -p /home/"${BIOUSER}"/NFS/conf
   cp ${SCRIPTDIR}/startNFS.sh /home/"${BIOUSER}"/NFS
