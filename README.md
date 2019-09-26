@@ -121,7 +121,7 @@ vignette("annotate")
 
 * Error during plot
 
-Try to resize browser window to increase size if plots pane.
+Try to resize browser window to increase size of plots pane.
 ```
 Error in plot.new() : figure margins too large
 ```
