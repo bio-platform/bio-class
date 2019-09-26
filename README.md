@@ -119,6 +119,14 @@ vignette("grid")
 vignette("annotate")
 ```
 
+* Error during plot
+
+Try to resize browser window to increase size if plots pane.
+```
+Error in plot.new() : figure margins too large
+```
+
+
 #### Conda [Managing packages](https://docs.conda.io/projects/conda/en/latest/user-guide/tasks/manage-pkgs.html)
 
 Start Conda
