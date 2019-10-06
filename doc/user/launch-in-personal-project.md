@@ -22,6 +22,7 @@ Using prepared image is a preferred way. Frontend appliacation is prepared to fu
         * Ingress         IPv4    TCP     80 (HTTP)       0.0.0.0/0
         * Ingress         IPv4    TCP     443 (HTTPS)     0.0.0.0/0
         * Egress	  IPv4 	  Any     Any             0.0.0.0/0 (select *Rule* *Other Protocol*, select *Direction* *Egress*, insert *-1* as *IP protocol*)
+        * Ingress         IPv4    TCP     8787            0.0.0.0/0 (In case of Rstudio using unsecured HTTP)
     ![Manage Security Group Rules](./../img/network_secutity_groups_rules.png)
 * Launch instance
     * Open Project -> Compute -> Instances and use button **Launch Instance**

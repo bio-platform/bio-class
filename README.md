@@ -175,6 +175,11 @@ In case of ping do not work add rule:
 Ingress 	IPv4 	ICMP 	Any 	0.0.0.0/0
 ```
 
+In case of Rstudio using unsecured HTTP add rule:
+```
+Ingress 	IPv4 	TCP 	8787 	0.0.0.0/0
+```
+
 #### HTTPS certificate check
 
 In case of issue to renew certificate for HTTPS
