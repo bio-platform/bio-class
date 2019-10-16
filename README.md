@@ -56,9 +56,13 @@ There are only two steps to proceed with after instance launch using prepared im
 * Update repository
   * To obtain latest changes of this repository execute `updateREPO`
 
+* Updates are installed automatically every first Saturday of every month. In case of need to disable the updates completely, execute command `sudo sed -i 's/^/#/g' /etc/cron.d/updates` (For Experienced Users Only, At Your Own Risk)
+
 * Backup home directory to NFS
   * Backup your home directory to NFS executing `backup2NFS`
   * Restore data back to the instance executing `restoreFromNFS` (For Experienced Users Only)
+
+* For security reasons failed login attempt limits are realized, so after exceeding this limit your IP address may be blocked for some time. See more below in section [Fail2ban](#fail2ban)
 
 * Support
   * Send email to [cloud@metacentrum.cz](mailto:cloud@metacentrum.cz?subject=Bioconductor), do not forget to mention Bioconductor in Subject field
@@ -196,6 +200,48 @@ sudo certbot certificates
 ```
 sudo certbot renew --dry-run
 ```
+
+#### Fail2ban
+
+In case of blocked SSH access due to exceeded limit of failed login attempts, IP address of your personal computer should be blocked. After a half an hour it should be released again.
+
+You can check blocked IP addresses:
+
+```
+sudo iptables -n -L
+```
+
+Example from previous command output, where NNN.NNN.NNN.NNN is blocked IP address of your computer:
+```
+...
+Chain f2b-ssh (1 references)
+target     prot opt source               destination
+REJECT     all  --  NNN.NNN.NNN.NNN      0.0.0.0/0            reject-with icmp-port-unreachable
+RETURN     all  --  0.0.0.0/0            0.0.0.0/0
+...
+```
+
+Get chains list (usable to unban from previous output `Chain f2b-ssh (1 references)`):
+```
+sudo fail2ban-client status
+```
+
+Unban specified chain (in the example below as chains use ssh and sshd), replace NNN.NNN.NNN.NNN with your computer IP address
+```
+sudo fail2ban-client set ssh unbanip NNN.NNN.NNN.NNN
+sudo fail2ban-client set sshd unbanip NNN.NNN.NNN.NNN
+```
+
+Unban may be executed from Rstudio Console also:
+```
+system('sudo fail2ban-client status')
+system('sudo iptables -n -L')
+system('sudo fail2ban-client set ssh unbanip NNN.NNN.NNN.NNN')
+system('sudo fail2ban-client set sshd unbanip NNN.NNN.NNN.NNN')
+system('sudo fail2ban-client set nginx-rstudio unbanip NNN.NNN.NNN.NNN')
+```
+
+If more Bans during 5 hours, then whole access should be blocked for 24 hours!
 
 #### Tmux
 *  You may open Tmux session using `tmux` or attach to the existing Tmux session by `tmux attach`. Tmux can prevent updates break if your local computer for example loose connection. Another example is executing bash commands with long run time

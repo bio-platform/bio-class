@@ -1,0 +1,51 @@
+# jail local configuration file
+#
+
+[sshd]
+
+enabled = true
+logpath  = /var/log/auth.log
+#          localhost   AV UMG
+ignoreip = 127.0.0.1/8,147.231.144.0/22,147.231.150.0/24,147.231.47.144/28
+maxretry = 5
+bantime  = 1800
+findtime = 900
+
+[ssh]
+
+enabled  = true
+port     = ssh
+filter   = sshd
+logpath  = /var/log/auth.log
+#          localhost   AV UMG
+ignoreip = 127.0.0.1/8,147.231.144.0/22,147.231.150.0/24,147.231.47.144/28
+maxretry = 5
+bantime  = 1800
+findtime = 900
+
+[nginx-rstudio]
+
+enabled = true
+port = http,https
+filter = nginx-rstudio
+logpath = /var/log/nginx/access.log
+#          localhost   AV UMG
+ignoreip = 127.0.0.1/8,147.231.144.0/22,147.231.150.0/24,147.231.47.144/28
+maxretry = 5
+bantime  = 1800
+findtime = 900
+
+[repeat-offender]
+
+enabled = true
+filter = repeat-offender
+port = all
+banaction = iptables-allports
+logpath = /var/log/fail2ban.log
+#          localhost   AV UMG
+ignoreip = 127.0.0.1/8,147.231.144.0/22,147.231.150.0/24,147.231.47.144/28
+# Repeat offender if previously banned 5 times within 5 hours.
+maxretry = 5
+findtime = 18000
+# Ban for 24 hours.
+bantime = 86400

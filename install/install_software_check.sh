@@ -325,6 +325,11 @@ elif [[ "$MODE" == "updateREPO" ]];then
     for file in ${CONF_DIR}/.conf ${CONF_DIR}/nginx.conf ${CONF_DIR}/nginx.conf.clean ${CONF_DIR}/rserver.conf.clean ; do \
     sudo cp $file /home/"${BIOUSER}"/HTTPS/conf ; done
     sudo chmod 644 /home/"${BIOUSER}"/HTTPS/conf/* ; sudo chown root: /home/"${BIOUSER}"/HTTPS/conf/*
+
+    echo -e "\n--------Execute Patch---------"
+    cd /home/debian/bio-class/install
+    sudo ./install_software_patch.sh
+
     echo -e "\n--------Finished to update conf. files, service scripts---------"
   fi
 

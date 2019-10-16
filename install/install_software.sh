@@ -269,7 +269,12 @@ if ([[ -n "$BIOSW_GAA" ]] && [[ "$MODE" == "all" ]]) || [[ "$MODE" == "base" ]];
   PATH=$PATH;PATH+=":${INSTALL_DIR}/${SW_NAME}-${SW_VERSION}/Linux-amd64/bin"; export PATH ; echo ":${INSTALL_DIR}/${SW_NAME}-${SW_VERSION}/Linux-amd64/bin" >> "${PATH_FILE}"
 
   #install_fastx
-  apt-get install -y pkg-config libgtextutils-dev
+  apt-get install -y pkg-config libgtextutils-dev libgd-perl gnuplot
+  export PERL_MM_USE_DEFAULT=1
+  perl -MCPAN -e 'install "YAML"'
+  perl -MCPAN -e 'install "GD"'
+  perl -MCPAN -e 'install "GD::Graph::bars"'
+  perl -MCPAN -e 'install "PerlIO::gzip"'
   SW_NAME="fastx_toolkit";SW_VERSION="0.0.14";
     [ ! -f "${TMP_DIR}/fastx_toolkit-${SW_VERSION}.tar.bz2" ] && wget --no-verbose https://github.com/agordon/fastx_toolkit/releases/download/${SW_VERSION}/fastx_toolkit-${SW_VERSION}.tar.bz2 -P "${TMP_DIR}"
     tar -jxf "${TMP_DIR}/${SW_NAME}-${SW_VERSION}.tar.bz2" -C "${TMP_DIR}"
@@ -448,6 +453,14 @@ if [[ "$MODE" == "all" ]] || [[ "$MODE" == "post" ]];then
   for file in ${CONF_DIR}/.conf ${CONF_DIR}/nginx.conf ${CONF_DIR}/nginx.conf.clean ${CONF_DIR}/rserver.conf.clean ; do \
   cp $file /home/"${BIOUSER}"/HTTPS/conf ; done
   chmod 644 /home/"${BIOUSER}"/HTTPS/conf/* ; chown root: /home/"${BIOUSER}"/HTTPS/conf/*
+
+  # Trimmomatic - executable .jar file
+  if [[ ! -f /usr/bin/trimmomatic ]];then
+    cp ${SCRIPTDIR}/trimmomatic /usr/bin
+    chown root: /usr/bin/trimmomatic
+    chmod 755 /usr/bin/trimmomatic
+  fi
+
 fi
 
 if [[ "$MODE" == "all" ]] || [[ "$MODE" == "base" ]]; then
@@ -461,11 +474,29 @@ if [[ "$MODE" == "all" ]] || [[ "$MODE" == "base" ]]; then
     chown root: /var/www/html/index.nginx-debian.html
     chmod 644 /var/www/html/index.nginx-debian.html
   fi
+
+  # fail2ban
+  apt-get -y install iptables fail2ban
+  cp ${CONF_DIR}/jail.local /etc/fail2ban
+  cp ${CONF_DIR}/nginx-rstudio.conf /etc/fail2ban/filter.d
+  cp ${CONF_DIR}/repeat-offender.conf /etc/fail2ban/filter.d
+  for file in /etc/fail2ban/filter.d/nginx-rstudio.conf /etc/fail2ban/jail.local /etc/fail2ban/filter.d/repeat-offender.conf ; do \
+  chown root: $file ; \
+  chmod 644 $file ; done
+  service fail2ban restart
 fi
 
 if [[ "$MODE" == "all" ]] || [[ "$MODE" == "post" ]];then
   # Cron for backup
   echo -e "* 1,13 * * * ${BIOUSER} public_ipv4=\$(curl -s http://169.254.169.254/2009-04-04/meta-data/public-ipv4 2>/dev/null | grep -E -o \"([0-9]{1,3}[\.]){3}[0-9]{1,3}\");nginxconf=\$(grep cert.pem /etc/nginx/nginx.conf) ;[ -n \"\$public_ipv4\" ] && [ -n \"\$nginxconf\" ] && [ -d "${NFS_HOME_PERSISTENT}/${BIOUSER}/${NFS_STORAGE_BACKUP_HTTPS_DIR}" ] && cd /home/${BIOUSER}/HTTPS/ && /usr/bin/flock -w 10 /var/lock/bio-class/startHTTPS ./startHTTPS.sh -m backup >/dev/null 2>&1" > /etc/cron.d/backupHTTPS
+
+  # Updates
+  if [[ ! -f /etc/cron.d/updates ]];then
+    echo  -e "0 0 1-7 * * root [ \$(date +\%u) -eq 6 ] && rm -rf /home/debian/updates.txt.old && mv /home/debian/updates.txt /home/debian/updates.txt.old" | sudo tee -a /etc/cron.d/updates
+    echo -e "5,15,25 1 1-7 * * ${BIOUSER} [ \$(date +\%u) -eq 6 ] && cd /home/debian/bio-class/install && /usr/bin/flock -w 10 /var/lock/bio-class/updates ./install_software_check.sh -m updateREPO 2>&1 | sudo tee -a /home/debian/updates.txt" | sudo tee -a /etc/cron.d/updates
+    echo -e "40 1 1-7 * * ${BIOUSER} [ \$(date +\%u) -eq 6 ] && cd /home/debian/bio-class/install && /usr/bin/flock -w 10 /var/lock/bio-class/updates ./install_software_check.sh -m updateOS 2>&1 | sudo tee -a /home/debian/updates.txt" | sudo tee -a /etc/cron.d/updates
+    echo -e "0 5 1-7 * * ${BIOUSER} [ \$(date +\%u) -eq 6 ] && cd /home/debian/bio-class/install && /usr/bin/flock -w 10 /var/lock/bio-class/updates ./install_software_check.sh -m updateBIOSW 2>&1 | sudo tee -a /home/debian/updates.txt" | sudo tee -a /etc/cron.d/updates
+  fi
 fi
 
 if [[ "$MODE" == "all" ]] || [[ "$MODE" == "post" ]];then
