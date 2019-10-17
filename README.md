@@ -101,6 +101,26 @@ user@instance:~$
 ssh-keygen -f ~/.ssh/known_hosts -R "<Floating IP>"
 ```
 
+* Verify Passphrase/Public key
+
+Execute command `ssh-keygen -y -f ~/.ssh/id_rsa` and enter passphrase. If correct passphrase, then public key will be shown, otherwise error message.
+
+Correct passphrase with public key in output:
+```
+ssh-keygen -y -f ~/.ssh/id_rsa
+Enter passphrase: *******
+ssh-rsa AAAAB3NzaC1yc2EAAAADAQ...............................AAABAQDBJhVYDYxXOvcQ==
+```
+
+Incorrect passphrase:
+```
+ssh-keygen -y -f ~/.ssh/id_rsa
+Enter passphrase: *******
+Load key "/root/.ssh/id_rsa": incorrect passphrase supplied to decrypt private key
+```
+
+On Windows you can use *PutttyGen* (included in [Putty installer](https://www.putty.org)) to verify your *Passphrase/Public key* as descibed at [RELOADING A PRIVATE KEY](https://www.ssh.com/ssh/putty/putty-manuals/0.68/Chapter8.html#puttygen-load).
+
 * If *No X11 DISPLAY variable was set, but this program performed an operation which requires it* during fastqc executing then run command below before connecting to instance. Remove known_hosts record from previous instances also.
 
 ```
