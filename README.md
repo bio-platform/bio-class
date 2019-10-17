@@ -74,6 +74,27 @@ There are only two steps to proceed with after instance launch using prepared im
 
 #### SSH
 
+* If *Are you sure you want to continue connecting (yes/no)?* then confirm using *yes*. Continue only with Enter without *yes* is not enough and login won't be enabled.
+
+Login failed because of using Enter without *yes*
+```
+# ssh -A -Y -X -i ~/.ssh/id_rsa <login>@<Floating IP>
+The authenticity of host '.............' can't be established.
+ECDSA key fingerprint is SHA256:..................
+Are you sure you want to continue connecting (yes/no)?
+Host key verification failed.
+```
+
+Correct confirm using *yes* and login
+```
+# ssh -A -Y -X -i ~/.ssh/id_rsa <login>@<Floating IP>
+The authenticity of host '.............' can't be established.
+ECDSA key fingerprint is SHA256:..................
+Are you sure you want to continue connecting (yes/no)? yes
+....
+user@instance:~$
+```
+
 * If *WARNING: REMOTE HOST IDENTIFICATION HAS CHANGED!* then remove known_hosts record from previous instances before connecting from your computer
 
 ```
