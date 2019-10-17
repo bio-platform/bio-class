@@ -121,6 +121,15 @@ Load key "/root/.ssh/id_rsa": incorrect passphrase supplied to decrypt private k
 
 On Windows you can use *PutttyGen* (included in [Putty installer](https://www.putty.org)) to verify your *Passphrase/Public key* as descibed at [RELOADING A PRIVATE KEY](https://www.ssh.com/ssh/putty/putty-manuals/0.68/Chapter8.html#puttygen-load).
 
+* Check key fingerprint (md5)
+
+Execute command below to check fingerprint of your key against imported public key in Project->Compute->Keys->key detail
+
+```
+ssh-keygen -E md5 -l -f ~/.ssh/id_rsa
+2048 MD5:94:c0:ea:94:c0:ea:94:c0:ea:94:c0:ea:94:c0:ea:aa ~/.ssh/id_rsa.pub (RSA)
+```
+
 * If *No X11 DISPLAY variable was set, but this program performed an operation which requires it* during fastqc executing then run command below before connecting to instance. Remove known_hosts record from previous instances also.
 
 ```
