@@ -59,5 +59,9 @@ if [[ ! -f /usr/local/share/perl/5.24.1/GD/Graph.pm ]];then
 fi
 
 # Patch
+echo "Install patch has finished"
+
+# Print user to check in log
+echo "BIOUSER: $BIOUSER"
 
 exit 0
