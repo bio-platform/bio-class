@@ -49,3 +49,18 @@ maxretry = 5
 findtime = 18000
 # Ban for 24 hours.
 bantime = 86400
+
+[repeat-offender-found]
+
+enabled = true
+filter = repeat-offender-found
+port = all
+banaction = iptables-allports
+logpath = /var/log/fail2ban.log
+#          localhost   AV UMG
+ignoreip = 127.0.0.1/8,147.231.144.0/22,147.231.150.0/24,147.231.47.144/28
+# Repeat offender found if previously found ssh attempts.
+maxretry = 24
+findtime = 86400
+# Ban for 7*24 hours.
+bantime = 604800

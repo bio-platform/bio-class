@@ -480,7 +480,8 @@ if [[ "$MODE" == "all" ]] || [[ "$MODE" == "base" ]]; then
   cp ${CONF_DIR}/jail.local /etc/fail2ban
   cp ${CONF_DIR}/nginx-rstudio.conf /etc/fail2ban/filter.d
   cp ${CONF_DIR}/repeat-offender.conf /etc/fail2ban/filter.d
-  for file in /etc/fail2ban/filter.d/nginx-rstudio.conf /etc/fail2ban/jail.local /etc/fail2ban/filter.d/repeat-offender.conf ; do \
+  cp ${CONF_DIR}/repeat-offender-found.conf /etc/fail2ban/filter.d
+  for file in /etc/fail2ban/filter.d/nginx-rstudio.conf /etc/fail2ban/jail.local /etc/fail2ban/filter.d/repeat-offender.conf /etc/fail2ban/filter.d/repeat-offender-found.conf ; do \
   chown root: $file ; \
   chmod 644 $file ; done
   service fail2ban restart
