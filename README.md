@@ -292,6 +292,7 @@ system('sudo fail2ban-client set nginx-rstudio unbanip NNN.NNN.NNN.NNN')
 ```
 
 If more Bans during 5 hours, then whole access should be blocked for 24 hours!
+If more failing SSH attempts during 24 hours, then whole access should be blocked for 7*24 hours!
 
 #### Tmux
 *  You may open Tmux session using `tmux` or attach to the existing Tmux session by `tmux attach`. Tmux can prevent updates break if your local computer for example loose connection. Another example is executing bash commands with long run time
