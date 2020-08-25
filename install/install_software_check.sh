@@ -260,6 +260,41 @@ elif [[ "$MODE" == "updateOS" ]];then
   sudo apt-get update
   sudo DEBIAN_FRONTEND=noninteractive apt-get -y upgrade | tee /tmp/uptateOS4reboot.txt
   reboot_needed=$(cat /tmp/uptateOS4reboot.txt | egrep -i "\breboot\b")
+
+  # Fix Error during NFS setup after nfs-common update
+  tmp_nfs_utils=$(sudo egrep "RPCGSSDOPTS" /usr/lib/systemd/scripts/nfs-utils_env.sh)
+  if [[ -z "$tmp_nfs_utils" ]];then
+    sudo apt-get update
+    sudo DEBIAN_FRONTEND=noninteractive apt-get -y upgrade | tee /tmp/uptateOS4reboot.txt
+    reboot_needed=$(cat /tmp/uptateOS4reboot.txt | egrep -i "\breboot\b")
+    if [[ -z "$reboot_needed" ]];then
+      reboot_needed="Fix Error during NFS setup after nfs-common update"
+      echo "$reboot_needed"
+    fi
+
+    # NFS RT#722986 #725024 #723554
+    echo "Change in /usr/lib/systemd/scripts/nfs-utils_env.sh"
+    sudo sed -i '/^echo PIPEFS_MOUNTPOINT.*/i echo GSSDARGS=\\\"$RPCGSSDOPTS\\\"' /usr/lib/systemd/scripts/nfs-utils_env.sh ;
+
+    # Set back previous change by ticket RT#722986
+    tmp_nfs_common=$(sudo egrep "GSSDARGS" /etc/default/nfs-common)
+    if [[ -n "$tmp_nfs_common" ]];then
+      echo "Set back change in /etc/default/nfs-common"
+      sudo sed -i 's/GSSDARGS/GSSDOPTS/' /etc/default/nfs-common
+    fi
+
+    # Cron
+    tmp_cron_updates=$(egrep "install_software_check.sh -m updateOS" /etc/cron.d/updates | egrep -v "^#")
+    if [[ -z "$tmp_cron_updates" ]];then
+      BIOUSER=$(curl -s  http://169.254.169.254/openstack/2016-06-30/meta_data.json 2>/dev/null | python -m json.tool | egrep -i Bioclass_user |cut -f 2 -d ':' | tr -d ' ' | tr -d '"' | tr '[:upper:]' '[:lower:]')
+      if [[ -n "$BIOUSER" ]]; then
+       sudo echo -e "40 1 1-7 * * ${BIOUSER} [ \$(date +\%u) -eq 6 ] && cd /home/debian/bio-class/install && /usr/bin/flock -w 10 /var/lock/bio-class/updates ./install_software_check.sh -m updateOS 2>&1 | sudo tee -a /home/debian/updates.txt" | sudo tee -a /etc/cron.d/updates
+      else
+        echo "Error to insert updateOS into cron file for empty BIOUSER!"
+      fi
+    fi
+  fi
+
   if [[ -n "$reboot_needed" ]];then
     echo "Reboot needed after upgrade, going to reboot now!
 ---------Please do not forget to startNFS after instance boot---------"
