@@ -13,6 +13,7 @@ The interface for manual startup and necessary settings that the frontend is not
     * ![Login](./../img/frontend_eduid.png)
   * On the `Consent about releasing personal information` select `Do not ask again` and confirm `Yes, continue`
     * ![Confirm](./../img/frontend_personal_information.png)
+    * _Please note that certain browsers (e.g., a Private Window in Firefox) have been known to lead the user to a blank or non-responisve page after this step. Should that happen, try either reloading the page or going back to the initial page of the frontend and logging in again. This issue only typically occurs once, if at all._
   * After logging in using EDUID, a project selection is offered if the user has more than one. If you do not have multiple projects, then you proceed directly to the overview
     * ![Project](./../img/frontend_project.png)
   * Start your new instance using button *Bioconductor*
