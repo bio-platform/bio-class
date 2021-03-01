@@ -105,6 +105,7 @@ fi
 echo "BIOUSER: $BIOUSER"
 echo "BIOSW_AGE: $BIOSW_AGE"
 echo "BIOSW_GAA: $BIOSW_GAA"
+echo "BIOCLASS FOR DEBIAN 9"
 
 if [[ "$MODE" == "pre" ]] || [[ "$MODE" == "all" ]];then
   useradd -m "$BIOUSER"
