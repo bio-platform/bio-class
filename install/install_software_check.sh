@@ -87,6 +87,14 @@ Unable to check if installed $SW_NAME
 }
 
 if [[ "$MODE" == "status" ]];then
+  tmp_dir=$(pwd)
+  cd /home/debian/bio-class
+  SW_NAME="Bio-class github repository"
+  command_output=$(git remote show origin | head -n 2 | sed -rn 's/.*(https.*)/\1/p')
+  command_status="$?"
+  function_echo_output
+  cd $tmp_dir
+
   echo "Installed software check"
   SW_NAME="bsmap"
   command_output=$(bsmap -h 2>&1| egrep "Usage")
