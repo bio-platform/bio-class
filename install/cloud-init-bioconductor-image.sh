@@ -29,6 +29,22 @@ echo -e "####################################################################
 sed -i 's/#Banner none$/Banner \/etc\/issue.net/g' /etc/ssh/sshd_config
 systemctl restart sshd
 
+ #!/bin/bash
+
+echo "------------------------"
+echo "Checking Debian OS version versus github bio-class repository version"
+tmp_req_ver=9
+tmp_ver=$(cat /etc/debian_version | cut -f 1 -d '.')
+echo "DEBIAN VERSION $tmp_ver"
+echo "BIO-CLASS VERSION $tmp_req_ver"
+if [[ $tmp_ver -ne $tmp_req_ver ]];then
+  echo "------------------------"
+  echo "ERROR TO CONTINUE, DEBIAN IS VERSION $tmp_ver" BUT IS REQUIRED VERSION $tmp_req_ver
+  echo "UNABLE TO CONTINUE, EXITING CUSTOM CLOUD INIT SCRIPT FOR BIOCONDUCTOR"
+  echo "------------------------"
+  exit 1
+fi
+
 # Backup repo
 if [[ -d /home/debian/bio-class ]];then
   mv /home/debian/bio-class /home/debian/bio-class-backup
