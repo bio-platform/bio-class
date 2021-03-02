@@ -87,6 +87,11 @@ Unable to check if installed $SW_NAME
 }
 
 if [[ "$MODE" == "status" ]];then
+  SW_NAME="Debian version"
+  command_output=$(cat /etc/debian_version)
+  command_status="$?"
+  function_echo_output
+
   tmp_dir=$(pwd)
   cd /home/debian/bio-class
   SW_NAME="Bio-class github repository"
