@@ -17,8 +17,30 @@ chown root: /home/debian/.ssh/authorized_keys
 # True to use deploy key or any other to download public repo
 PRIVATE_REPO=""
 
+echo "------------------------"
+echo "Checking Debian OS version versus github bio-class repository version"
+tmp_req_ver=9
+tmp_req_repo="bio-class"
+tmp_ver=$(cat /etc/debian_version | cut -f 1 -d '.')
+echo "DEBIAN VERSION $tmp_ver"
+echo "BIO-CLASS VERSION $tmp_req_ver"
+
 # Set SSH Warning Message to Users
 tmp_issuenet=$(sudo cat /etc/issue.net)
+if [[ $tmp_ver -ne $tmp_req_ver ]];then
+echo -e "####################################################################
+#                                                                  #
+# ERROR - DEBIAN IS VERSION $tmp_ver BUT FOR SELECTED BIOCONDUCTOR IS REQUIRED VERSION $tmp_req_ver #
+#                                                                  #
+#                                                                  #
+# UNABLE TO CONTINUE, EXITING CUSTOM CLOUD INIT SCRIPT FOR $tmp_req_repo #
+#                                                                  #
+####################################################################" > /etc/issue.net
+  echo "------------------------"
+  echo "ERROR - DEBIAN IS VERSION $tmp_ver" BUT FOR SELECTED BIOCONDUCTOR IS REQUIRED VERSION $tmp_req_ver
+  echo "UNABLE TO CONTINUE, EXITING CUSTOM CLOUD INIT SCRIPT FOR $tmp_req_repo"
+  echo "------------------------"
+else
 echo -e "####################################################################
 #                                                                  #
 # Instance is during process of software instalation, please wait! #
@@ -26,10 +48,15 @@ echo -e "####################################################################
 # Login will be enabled after finished configuration.              #
 #                                                                  #
 ####################################################################" > /etc/issue.net
+fi
+
 sed -i 's/#Banner none$/Banner \/etc\/issue.net/g' /etc/ssh/sshd_config
 systemctl restart sshd
 
- #!/bin/bash
+if [[ $tmp_ver -ne $tmp_req_ver ]];then
+  echo "Exiting from CUSTOM CLOUD INIT SCRIPT FOR BIOCONDUCTOR"
+  exit 1
+fi
 
 echo "------------------------"
 echo "Checking Debian OS version versus github bio-class repository version"
