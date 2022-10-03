@@ -17,10 +17,10 @@ The interface for manual startup and necessary settings that the frontend is not
     * ![Project](./../img/frontend_project.png)
   * Start your new instance using button *Bioconductor*
     * ![Launch button](./../img/frontend_dashboard.png)
-  * Instances should be launched in a personal project and with the public-cesnet-78-128-250-PERSONAL network, and this can be edited in the selection
+  * Instances should be launched in a personal project and with the public-muni-147-251-115-PERSONAL network, and this can be edited in the selection
     * Insert *Name* of your new virtual machine
     * Select the public key to use ([Key pair section in manual launch guide][launch-in-personal-project])
-    * Check if the network 78-128-25-pers-proj is selected, otherwise select it
+    * Check if the network 147-251-115-pers-proj-net is selected, otherwise select it
     * Click the button *Create Instance*
     * ![Launch Instance](./../img/frontend_create_instance.png)
   * Wait until the machine launch has finished. Confirm Allocate Floating IP
