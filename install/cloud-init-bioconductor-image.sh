@@ -1,4 +1,7 @@
 #!/bin/bash
+
+set -x
+
 # Cloud init used during VM initialize on image created previously using Packer
 PATH=$PATH;PATH+=":/bin" ;PATH+=":/usr/bin";PATH+=":/usr/sbin";PATH+=":/usr/local/bin"; 
 dirname=$(dirname $0)
@@ -66,6 +69,9 @@ fi
 cd /home/debian/;
 
 if [[ "$PRIVATE_REPO" == "true" ]];then
+
+  set +x
+
   # Using deploy key to access Github private repository
   # Private key for deploy key, NOT your personal private key!
   # This part is not necessary if repository public
@@ -83,6 +89,8 @@ RSAAuthentication yes
 IdentityFile /root/.ssh/id_rsa
 StrictHostKeyChecking no
 UserKnownHostsFile=/dev/null" > ~/.ssh/config
+
+  set -x
 
   cd /root/
   chmod 700 .ssh/
@@ -132,7 +140,7 @@ else
   fi
 fi
 
-# List if cloned successfully                
+# List if cloned successfully
 ls -la /home/debian/bio-class
 
 # Change to repository
