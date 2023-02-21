@@ -4,10 +4,10 @@ Using prepared image is a preferred way. Frontend appliacation is prepared to fu
 
 * Follow the instructions [Quick Start](https://cloud.gitlab-pages.ics.muni.cz/documentation/quick-start/)
   * Check Router, obtain Floating IP, update Security Group
-    * Check if Router contain External Network *public-cesnet-78-128-250-PERSONAL*
+    * Check if Router contain External Network *public-muni-147-251-115-PERSONAL*
       * Open Project -> Network -> Routers
       * If other setting, then use button *Clear Gateway*, confirm *Clear Gateway*
-      * Select network *public-cesnet-78-128-250-PERSONAL* and *Submit*
+      * Select network *public-muni-147-251-115-PERSONAL* and *Submit*
       ![Routers](./../img/network_routers.png)
     * ### Floating IP
       * Check if Floating IP exists
@@ -36,7 +36,7 @@ Using prepared image is a preferred way. Frontend appliacation is prepared to fu
     ![Select Boot source Image](./../img/instance_launch_source.png)
     * Select Flavor *2 CPU* and *16GB RAM*
     ![Select Flavor](./../img/instance_launch_flavor.png)
-    * Select Network *78-128-250-pers-proj-net* - *personal-project-network-subnet*
+    * Select Network *147-251-115-pers-proj-net* - *personal-project-network-subnet*
     ![Select Network](./../img/instance_launch_network.png)
     * ### Key pair
       * **If public key imported already**, add existing key to the instance and continue using button **Next**
