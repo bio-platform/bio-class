@@ -1,4 +1,7 @@
 #!/bin/bash
+
+set -x
+
 # Install all required software directly during VM cloud init (time consuming)
 PATH=$PATH;PATH+=":/bin" ;PATH+=":/usr/bin";PATH+=":/usr/sbin";PATH+=":/usr/local/bin"; 
 dirname=$(dirname $0)
@@ -42,6 +45,9 @@ sed -i 's/# alias ll=\x27ls \$LS_OPTIONS -l\x27/alias ll=\x27ls \$LS_OPTIONS -al
 apt-get -y install mc vim git dpkg-dev apt-transport-https ca-certificates dirmngr
 
 if [[ "$PRIVATE_REPO" == "true" ]];then
+
+  set +x
+
   # Using deploy key to access Github private repository
   # Private key for deploy key, NOT your personal private key!
   # This part is not necessary if repository public
@@ -59,6 +65,8 @@ RSAAuthentication yes
 IdentityFile /root/.ssh/id_rsa
 StrictHostKeyChecking no
 UserKnownHostsFile=/dev/null" > ~/.ssh/config
+
+  set -x
 
   cd /root/
   chmod 700 .ssh/
